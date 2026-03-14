@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Athletics</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;--white:#f5f5f0;--lime:#d4f53c;--gray:#1a1a1a;
+  --mid:#2e2e2e;--muted:#888;--border:rgba(255,255,255,0.08);
+  --font-d:'Bebas Neue',sans-serif;--font-b:'Barlow',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--font-b);overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:var(--font-b)}
+input,select{font-family:var(--font-b)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-d);font-size:28px;letter-spacing:4px;color:var(--lime);cursor:pointer}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.65;transition:opacity .2s,color .2s}
+.nav-links a:hover{opacity:1;color:var(--lime)}
+.nav-right{display:flex;align-items:center;gap:20px}
+.cart-btn{display:flex;align-items:center;gap:8px;background:transparent;border:1.5px solid rgba(255,255,255,.2);color:var(--white);padding:9px 18px;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;transition:border-color .2s,color .2s}
+.cart-btn:hover{border-color:var(--lime);color:var(--lime)}
+.cart-count{background:var(--lime);color:var(--black);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+
+/* TICKER */
+.ticker{background:var(--lime);color:var(--black);height:40px;overflow:hidden;display:flex;align-items:center;margin-top:64px}
+.ticker-track{display:flex;animation:tick 30s linear infinite;white-space:nowrap}
+.ticker-item{font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:0 40px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* PAGE WRAPPER */
+#app{padding-top:0}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 104px)}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:80px 60px 80px 80px}
+.hero-eyebrow{font-weight:700;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--lime);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::before{content:'';width:32px;height:2px;background:var(--lime);display:block}
+.hero-title{font-family:var(--font-d);font-size:clamp(70px,8vw,120px);line-height:.9;letter-spacing:2px;margin-bottom:28px}
+.hero-title em{color:var(--lime);font-style:normal}
+.hero-sub{font-weight:300;font-size:17px;line-height:1.7;color:rgba(245,245,240,.6);max-width:400px;margin-bottom:44px}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 38px;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s}
+.btn-lime{background:var(--lime);color:var(--black)}
+.btn-lime:hover{background:#e8ff5c;transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.25)}
+.btn-outline:hover{border-color:var(--lime);color:var(--lime)}
+.btn-dark{background:var(--black);color:var(--lime)}
+.btn-dark:hover{opacity:.85}
+.btn-full{width:100%}
+.btn-lg{padding:18px 44px;font-size:13px}
+.hero-right{background:var(--gray);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+
+/* STATS */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat{padding:44px 32px;text-align:center;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:var(--font-d);font-size:52px;color:var(--lime);line-height:1;margin-bottom:6px}
+.stat-l{font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+
+/* SECTION HEADERS */
+.sec-hd{padding:72px 80px 40px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.sec-ey{font-weight:700;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--lime);margin-bottom:10px}
+.sec-title{font-family:var(--font-d);font-size:clamp(38px,4vw,60px);letter-spacing:2px;line-height:.95}
+.view-all{font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);opacity:.8;display:flex;align-items:center;gap:6px;transition:opacity .2s;cursor:pointer}
+.view-all:hover{opacity:1}
+
+/* PRODUCT GRID */
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:0 80px 72px}
+.prod-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+
+/* PRODUCT CARD */
+.pcard{background:var(--gray);cursor:pointer;transition:transform .25s}
+.pcard:hover{transform:translateY(-4px)}
+.pcard:hover .pcard-overlay{opacity:1}
+.pcard:hover .pcard-img-inner{transform:scale(1.03)}
+.pcard-img{aspect-ratio:3/4;overflow:hidden;position:relative;background:var(--mid)}
+.pcard-img-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:transform .4s}
+.pcard-badge{position:absolute;top:14px;left:14px;background:var(--lime);color:var(--black);font-weight:800;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;z-index:2}
+.pcard-badge.sale{background:#ff4a4a}
+.pcard-overlay{position:absolute;inset:auto 0 0;background:var(--lime);color:var(--black);text-align:center;padding:13px;font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0;transition:opacity .2s;z-index:2}
+.pcard-info{padding:10px 12px 14px}
+.pcard-cat{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:3px}
+.pcard-name{font-weight:700;font-size:13px;margin-bottom:6px;letter-spacing:.3px}
+.swatches{display:flex;gap:4px;margin-bottom:6px}
+.sw{width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,.15);cursor:pointer}
+.pcard-price{display:flex;align-items:baseline;gap:6px}
+.price-main{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--lime);letter-spacing:1px}
+.price-was{font-size:12px;color:var(--muted);text-decoration:line-through}
+
+/* CATEGORIES */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 80px 72px}
+.cat-card{aspect-ratio:4/3;display:flex;align-items:flex-end;cursor:pointer;overflow:hidden;position:relative}
+.cat-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform .4s}
+.cat-card:hover .cat-bg{transform:scale(1.05)}
+.cat-card:hover .cat-arr{background:var(--lime);border-color:var(--lime);color:var(--black)}
+.cat-content{position:relative;z-index:2;padding:28px;width:100%;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 100%)}
+.cat-ey{font-weight:700;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--lime);margin-bottom:4px}
+.cat-name{font-family:var(--font-d);font-size:34px;letter-spacing:2px;line-height:1;margin-bottom:12px}
+.cat-arr{width:34px;height:34px;border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s}
+
+/* FEATURE STRIP */
+.feature-strip{margin:0 80px 72px;background:var(--lime);color:var(--black);display:grid;grid-template-columns:1fr auto}
+.feature-left{padding:64px 72px;display:flex;flex-direction:column;justify-content:center}
+.feature-pre{font-weight:800;font-size:10px;letter-spacing:4px;text-transform:uppercase;opacity:.55;margin-bottom:14px}
+.feature-title{font-family:var(--font-d);font-size:clamp(44px,5vw,80px);line-height:.9;letter-spacing:2px;margin-bottom:20px}
+.feature-body{font-size:16px;font-weight:300;opacity:.7;max-width:360px;margin-bottom:36px}
+.feature-right{background:#1e2a0a;display:flex;align-items:center;justify-content:center;min-width:380px}
+
+/* PERKS */
+.perks{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:72px}
+.perk{padding:44px 32px;text-align:center;border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:12px}
+.perk:last-child{border-right:none}
+.perk-icon{width:44px;height:44px;background:rgba(212,245,60,.1);display:flex;align-items:center;justify-content:center;font-size:20px}
+.perk-t{font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase}
+.perk-s{font-size:13px;color:var(--muted);font-weight:300;line-height:1.5}
+
+/* NEWSLETTER */
+.newsletter{padding:72px 80px;text-align:center;background:var(--gray)}
+.nl-title{font-family:var(--font-d);font-size:clamp(32px,4vw,60px);letter-spacing:2px;margin-bottom:14px}
+.nl-title em{color:var(--lime);font-style:normal}
+.nl-sub{font-size:16px;color:var(--muted);font-weight:300;margin-bottom:36px}
+.nl-form{display:flex;max-width:480px;margin:0 auto}
+.nl-input{flex:1;background:var(--mid);border:none;border-bottom:2px solid rgba(255,255,255,.15);padding:15px 18px;color:var(--white);font-size:15px;outline:none;transition:border-color .2s}
+.nl-input:focus{border-bottom-color:var(--lime)}
+.nl-input::placeholder{color:var(--muted)}
+.nl-btn{background:var(--lime);color:var(--black);border:none;padding:15px 28px;font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.nl-btn:hover{background:#e8ff5c}
+
+/* FOOTER */
+footer{background:var(--black);padding:64px 80px 28px;border-top:1px solid var(--border)}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:56px}
+.foot-logo{font-family:var(--font-d);font-size:38px;letter-spacing:4px;color:var(--lime);margin-bottom:14px}
+.foot-desc{font-size:14px;color:var(--muted);font-weight:300;line-height:1.8;max-width:260px}
+.foot-socials{display:flex;gap:10px;margin-top:22px}
+.soc{width:34px;height:34px;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:all .2s;color:var(--muted);font-weight:700}
+.soc:hover{border-color:var(--lime);color:var(--lime)}
+.foot-col-t{font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:18px}
+.foot-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.foot-links a{font-size:14px;color:var(--muted);font-weight:300;transition:color .2s;cursor:pointer}
+.foot-links a:hover{color:var(--lime)}
+.foot-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;align-items:center;justify-content:space-between}
+.foot-copy{font-size:12px;color:rgba(136,136,136,.5)}
+.foot-legal{display:flex;gap:20px}
+.foot-legal a{font-size:12px;color:rgba(136,136,136,.4);transition:color .2s;cursor:pointer}
+.foot-legal a:hover{color:var(--muted)}
+
+/* COLLECTION PAGE */
+.collection-page{padding:72px 80px}
+.coll-header{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+.coll-title{font-family:var(--font-d);font-size:clamp(48px,6vw,88px);letter-spacing:2px;margin-bottom:6px}
+.coll-count{font-size:14px;color:var(--muted);font-weight:400}
+.coll-layout{display:grid;grid-template-columns:220px 1fr;gap:48px}
+.filter-sidebar{}
+.filter-group{margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid var(--border)}
+.filter-group:last-child{border-bottom:none}
+.filter-label{font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.filter-opts{display:flex;flex-direction:column;gap:8px}
+.filter-opt{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;color:var(--muted);transition:color .2s;user-select:none}
+.filter-opt:hover{color:var(--white)}
+.filter-opt input{accent-color:var(--lime);width:14px;height:14px;cursor:pointer}
+.filter-opt.active{color:var(--white)}
+.coll-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.sort-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.sort-count{font-size:14px;color:var(--muted)}
+.sort-sel{background:var(--gray);border:1px solid var(--border);color:var(--white);padding:8px 14px;font-size:13px;outline:none;cursor:pointer}
+
+/* PRODUCT DETAIL PAGE */
+.pd-page{padding:48px 80px 80px}
+.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:36px;display:flex;align-items:center;gap:8px}
+.breadcrumb span{cursor:pointer;transition:color .2s}
+.breadcrumb span:hover{color:var(--lime)}
+.breadcrumb .sep{opacity:.3}
+.pd-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-bottom:80px}
+.pd-imgs{display:flex;flex-direction:column;gap:3px}
+.pd-main-img{aspect-ratio:3/4;background:var(--mid);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pd-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.pd-thumb{aspect-ratio:1;background:var(--gray);display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid transparent;transition:border-color .2s;overflow:hidden}
+.pd-thumb.active{border-color:var(--lime)}
+.pd-info{}
+.pd-badge{display:inline-block;background:var(--lime);color:var(--black);font-weight:800;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;margin-bottom:14px}
+.pd-name{font-family:var(--font-d);font-size:clamp(32px,4vw,52px);letter-spacing:1px;line-height:.95;margin-bottom:10px}
+.pd-rating{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.stars{color:var(--lime);font-size:15px;letter-spacing:2px}
+.rating-count{font-size:14px;color:var(--muted);cursor:pointer;transition:color .2s}
+.rating-count:hover{color:var(--lime)}
+.pd-price{font-family:var(--font-d);font-size:42px;color:var(--lime);letter-spacing:1px;margin-bottom:24px;display:flex;align-items:baseline;gap:12px}
+.pd-price-was{font-size:24px;color:var(--muted);text-decoration:line-through}
+.pd-desc{font-size:15px;line-height:1.75;color:rgba(245,245,240,.7);font-weight:300;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.pd-opt-label{font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.pd-opt-label span{font-weight:400;color:var(--lime);text-transform:none;letter-spacing:0;cursor:pointer}
+.color-opts{display:flex;gap:10px;margin-bottom:24px}
+.color-opt{width:32px;height:32px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:border-color .2s;position:relative}
+.color-opt.active{border-color:var(--lime)}
+.color-opt::after{content:'';position:absolute;inset:2px;border-radius:50%;background:inherit}
+.size-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.size-opt{min-width:52px;padding:10px 14px;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:var(--white);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;text-align:center}
+.size-opt:hover{border-color:rgba(255,255,255,.4)}
+.size-opt.active{background:var(--lime);color:var(--black);border-color:var(--lime)}
+.size-opt.oos{opacity:.3;text-decoration:line-through;cursor:not-allowed}
+.qty-row{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.qty-ctrl{display:flex;align-items:center;border:1.5px solid rgba(255,255,255,.15)}
+.qty-ctrl button{background:transparent;border:none;color:var(--white);width:40px;height:40px;font-size:18px;cursor:pointer;transition:background .2s}
+.qty-ctrl button:hover{background:rgba(255,255,255,.08)}
+.qty-val{width:48px;text-align:center;font-weight:700;font-size:15px}
+.atb-btn{flex:1;background:var(--lime);color:var(--black);border:none;padding:16px;font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.atb-btn:hover{background:#e8ff5c}
+.atb-btn:active{transform:scale(.98)}
+.atb-success{background:var(--black);color:var(--lime);border:1.5px solid var(--lime)}
+.pd-features{margin-top:28px;padding-top:28px;border-top:1px solid var(--border)}
+.feat-item{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(245,245,240,.65);font-weight:300;margin-bottom:8px}
+.feat-item::before{content:'✓';color:var(--lime);font-weight:800;font-size:12px}
+
+/* REVIEWS SECTION */
+.reviews-section{padding:0 80px 80px}
+.reviews-summary{display:flex;align-items:center;gap:48px;padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:32px}
+.rev-big-num{font-family:var(--font-d);font-size:88px;color:var(--lime);line-height:1}
+.rev-stars-big{font-size:24px;color:var(--lime);letter-spacing:3px}
+.rev-total{font-size:14px;color:var(--muted)}
+.rev-bars{flex:1}
+.rev-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;font-size:13px}
+.rev-bar-label{width:40px;color:var(--muted)}
+.rev-bar-track{flex:1;height:6px;background:rgba(255,255,255,.08)}
+.rev-bar-fill{height:100%;background:var(--lime)}
+.rev-bar-count{width:28px;color:var(--muted);text-align:right}
+.review-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.review-card{background:var(--gray);padding:24px;border:1px solid var(--border)}
+.rev-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.rev-name{font-weight:700;font-size:14px}
+.rev-date{font-size:12px;color:var(--muted)}
+.rev-stars{color:var(--lime);font-size:13px;margin-bottom:8px}
+.rev-title{font-weight:700;font-size:14px;margin-bottom:6px}
+.rev-body{font-size:14px;color:rgba(245,245,240,.6);font-weight:300;line-height:1.6}
+.rev-verified{font-size:11px;color:var(--lime);font-weight:600;letter-spacing:1px;margin-top:10px}
+
+/* RELATED PRODUCTS */
+.related-section{padding:0 80px 80px}
+
+/* CART PAGE */
+.cart-page{padding:64px 80px 80px;min-height:calc(100vh - 64px)}
+.cart-layout{display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:start}
+.cart-title{font-family:var(--font-d);font-size:clamp(36px,4vw,60px);letter-spacing:2px;margin-bottom:36px}
+.cart-items{display:flex;flex-direction:column;gap:0}
+.cart-item{display:grid;grid-template-columns:120px 1fr auto;gap:24px;padding:24px 0;border-bottom:1px solid var(--border)}
+.cart-item-img{background:var(--mid);aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cart-item-info{display:flex;flex-direction:column;justify-content:space-between}
+.cart-item-name{font-weight:700;font-size:16px;margin-bottom:4px;cursor:pointer;transition:color .2s}
+.cart-item-name:hover{color:var(--lime)}
+.cart-item-meta{font-size:13px;color:var(--muted);margin-bottom:12px}
+.cart-item-qty{display:flex;align-items:center;gap:0;border:1px solid rgba(255,255,255,.12);width:fit-content}
+.cart-item-qty button{background:transparent;border:none;color:var(--white);width:36px;height:36px;font-size:16px;cursor:pointer;transition:background .2s}
+.cart-item-qty button:hover{background:rgba(255,255,255,.07)}
+.cart-item-qty span{width:40px;text-align:center;font-weight:700;font-size:14px}
+.cart-item-price{font-family:var(--font-d);font-size:26px;color:var(--lime);letter-spacing:1px}
+.cart-remove{font-size:12px;color:var(--muted);cursor:pointer;margin-top:8px;transition:color .2s;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.cart-remove:hover{color:#ff4a4a}
+.cart-summary{background:var(--gray);padding:32px;position:sticky;top:80px}
+.cart-summary-title{font-family:var(--font-d);font-size:28px;letter-spacing:2px;margin-bottom:24px}
+.summary-rows{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.summary-row{display:flex;justify-content:space-between;font-size:14px}
+.summary-row.total{font-weight:800;font-size:17px;border-top:none;padding-top:8px}
+.summary-row .val{font-weight:700}
+.free-ship{color:var(--lime);font-size:12px;font-weight:600;margin-bottom:16px;text-align:center}
+.promo-row{display:flex;gap:0;margin-bottom:20px}
+.promo-input{flex:1;background:var(--mid);border:none;border-bottom:2px solid rgba(255,255,255,.12);padding:12px 14px;color:var(--white);font-size:13px;outline:none;transition:border-color .2s}
+.promo-input:focus{border-bottom-color:var(--lime)}
+.promo-input::placeholder{color:var(--muted)}
+.promo-btn{background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--white);padding:12px 16px;font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.promo-btn:hover{border-color:var(--lime);color:var(--lime)}
+.empty-cart{text-align:center;padding:80px 0}
+.empty-cart-icon{font-size:64px;opacity:.3;margin-bottom:20px}
+.empty-cart-t{font-family:var(--font-d);font-size:36px;letter-spacing:2px;margin-bottom:12px}
+.empty-cart-s{color:var(--muted);font-weight:300;margin-bottom:32px}
+
+/* CHECKOUT */
+.checkout-page{padding:64px 80px 80px}
+.checkout-layout{display:grid;grid-template-columns:1fr 400px;gap:64px}
+.checkout-title{font-family:var(--font-d);font-size:48px;letter-spacing:2px;margin-bottom:40px}
+.checkout-section{margin-bottom:36px}
+.checkout-section-title{font-weight:800;font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.form-input{background:var(--gray);border:1px solid rgba(255,255,255,.1);color:var(--white);padding:13px 16px;font-size:14px;outline:none;transition:border-color .2s;font-family:var(--font-b)}
+.form-input:focus{border-color:var(--lime)}
+.form-input::placeholder{color:rgba(136,136,136,.5)}
+.form-select{background:var(--gray);border:1px solid rgba(255,255,255,.1);color:var(--white);padding:13px 16px;font-size:14px;outline:none;cursor:pointer;font-family:var(--font-b)}
+.form-select:focus{border-color:var(--lime)}
+.card-icons{display:flex;gap:8px;margin-bottom:12px}
+.card-icon{background:var(--mid);border:1px solid rgba(255,255,255,.1);padding:4px 10px;font-size:11px;font-weight:700;color:var(--muted);border-radius:3px}
+.checkout-summary{background:var(--gray);padding:32px;position:sticky;top:80px}
+.checkout-sum-title{font-family:var(--font-d);font-size:26px;letter-spacing:2px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.chk-items{display:flex;flex-direction:column;gap:14px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.chk-item{display:flex;align-items:center;gap:12px}
+.chk-item-img{width:56px;height:72px;background:var(--mid);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.chk-item-badge{position:absolute;top:-6px;right:-6px;background:var(--lime);color:var(--black);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.chk-item-info{flex:1}
+.chk-item-name{font-weight:700;font-size:13px;margin-bottom:2px}
+.chk-item-meta{font-size:12px;color:var(--muted)}
+.chk-item-price{font-weight:800;font-size:14px;color:var(--lime)}
+.chk-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.chk-row{display:flex;justify-content:space-between;font-size:14px;color:rgba(245,245,240,.7)}
+.chk-total{display:flex;justify-content:space-between;font-weight:800;font-size:18px;margin-bottom:20px}
+.secure-badge{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(--muted);margin-top:12px}
+
+/* CONFIRMATION */
+.confirm-page{min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:80px}
+.confirm-box{max-width:560px;width:100%;text-align:center}
+.confirm-check{width:80px;height:80px;background:rgba(212,245,60,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 28px}
+.confirm-title{font-family:var(--font-d);font-size:56px;letter-spacing:2px;color:var(--lime);margin-bottom:12px}
+.confirm-sub{font-size:17px;color:rgba(245,245,240,.65);font-weight:300;margin-bottom:8px}
+.confirm-order{font-size:14px;color:var(--muted);margin-bottom:36px}
+.confirm-details{background:var(--gray);padding:28px;text-align:left;margin-bottom:32px;border:1px solid var(--border)}
+.confirm-detail-row{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.confirm-detail-row:last-child{border-bottom:none}
+.confirm-detail-row .key{color:var(--muted)}
+.confirm-detail-row .val{font-weight:700}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--lime);color:var(--black);padding:14px 22px;font-weight:800;font-size:13px;letter-spacing:1px;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:10px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* UPLOAD OVERLAYS */
+.upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lime);cursor:pointer;z-index:10;border:2px dashed rgba(212,245,60,.4);transition:background .2s}
+.upload-overlay:hover{background:rgba(0,0,0,.8);border-color:var(--lime)}
+.upload-overlay-lg{font-size:15px}
+.upload-overlay-thumb{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;z-index:10;opacity:0;transition:opacity .2s}
+.pd-thumb:hover .upload-overlay-thumb{opacity:1}
+.edit-mode-card{cursor:crosshair}
+.edit-mode-banner{background:rgba(212,245,60,.08);border:1px dashed rgba(212,245,60,.3);color:var(--lime);text-align:center;padding:10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:0}
+
+@media(max-width:1100px){
+  nav{padding:0 24px}
+  .nav-links{display:none}
+  .hero{grid-template-columns:1fr}
+  .hero-left{padding:60px 32px}
+  .hero-right{display:none}
+  .prod-grid{grid-template-columns:repeat(3,1fr);padding:0 24px 48px}
+  .prod-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+  .cat-grid{grid-template-columns:1fr;padding:0 24px 48px}
+  .sec-hd{padding:48px 24px 28px}
+  .feature-strip{margin:0 24px 48px;grid-template-columns:1fr}
+  .feature-right{display:none}
+  .perks{grid-template-columns:repeat(2,1fr)}
+  .newsletter{padding:48px 24px}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:36px}
+  footer{padding:48px 24px 24px}
+  .collection-page{padding:48px 24px}
+  .coll-layout{grid-template-columns:1fr}
+  .filter-sidebar{display:none}
+  .coll-grid{grid-template-columns:repeat(3,1fr)}
+  .pd-page{padding:32px 24px 48px}
+  .pd-layout{grid-template-columns:1fr;gap:32px}
+  .reviews-section,.related-section{padding:0 24px 48px}
+  .review-cards{grid-template-columns:1fr}
+  .cart-page{padding:48px 24px}
+  .cart-layout{grid-template-columns:1fr}
+  .checkout-page{padding:48px 24px}
+  .checkout-layout{grid-template-columns:1fr}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .prod-grid{grid-template-columns:repeat(2,1fr)}
+  .coll-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Added to bag</div>
+
+<!-- SEARCH OVERLAY -->
+<div id="search-overlay" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);padding:80px 40px 40px">
+  <div style="max-width:700px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:0;border-bottom:2px solid var(--lime);margin-bottom:32px">
+      <span style="font-size:22px;margin-right:16px;opacity:.5">🔍</span>
+      <input id="search-input" placeholder="Search products, styles, categories..." style="flex:1;background:transparent;border:none;color:var(--white);font-size:24px;font-family:'Barlow',sans-serif;font-weight:300;outline:none;padding:12px 0" oninput="doSearch(this.value)">
+      <button onclick="closeSearch()" style="background:transparent;border:none;color:var(--muted);font-size:28px;cursor:pointer;padding:8px;transition:color .2s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--muted)'">✕</button>
+    </div>
+    <div id="search-results"></div>
+  </div>
+</div>
+
+<!-- SIZE GUIDE MODAL -->
+<div id="size-modal" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.88);align-items:center;justify-content:center;padding:24px">
+  <div style="background:#141414;max-width:780px;width:100%;max-height:92vh;overflow-y:auto;border:1px solid rgba(255,255,255,.12);border-radius:2px">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:28px 36px 24px;border-bottom:2px solid var(--lime)">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;line-height:1">SIZE GUIDE</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px;font-weight:400">All measurements in inches. Measure your body, not your clothes.</div>
+      </div>
+      <button onclick="document.getElementById('size-modal').style.display='none'" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--white);width:40px;height:40px;font-size:20px;cursor:pointer;border-radius:2px;display:flex;align-items:center;justify-content:center;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">✕</button>
+    </div>
+
+    <!-- How to Measure -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.08)">
+      <div style="background:#141414;padding:20px 24px;display:flex;align-items:flex-start;gap:14px">
+        <div style="font-size:24px;flex-shrink:0">📐</div>
+        <div>
+          <div style="font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Chest</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.5;font-weight:300">Measure around the fullest part of your chest, keeping the tape horizontal.</div>
+        </div>
+      </div>
+      <div style="background:#141414;padding:20px 24px;display:flex;align-items:flex-start;gap:14px">
+        <div style="font-size:24px;flex-shrink:0">📏</div>
+        <div>
+          <div style="font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Waist</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.5;font-weight:300">Measure around your natural waist, about 1 inch above your belly button.</div>
+        </div>
+      </div>
+      <div style="background:#141414;padding:20px 24px;display:flex;align-items:flex-start;gap:14px">
+        <div style="font-size:24px;flex-shrink:0">📍</div>
+        <div>
+          <div style="font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">Inseam</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.5;font-weight:300">Measure from the crotch seam down to the bottom of your ankle.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:32px 36px">
+
+      <!-- Tab switcher -->
+      <div style="display:flex;gap:0;margin-bottom:28px;border:1px solid rgba(255,255,255,.12)">
+        <button id="sg-tab-tops" onclick="sgTab('tops')" style="flex:1;padding:13px;font-family:'Barlow',sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;background:var(--lime);color:var(--black);transition:all .2s">Tops & Hoodies</button>
+        <button id="sg-tab-bottoms" onclick="sgTab('bottoms')" style="flex:1;padding:13px;font-family:'Barlow',sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:all .2s">Bottoms</button>
+        <button id="sg-tab-womens" onclick="sgTab('womens')" style="flex:1;padding:13px;font-family:'Barlow',sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;background:transparent;color:var(--muted);transition:all .2s">Womens</button>
+      </div>
+
+      <!-- Tops table -->
+      <div id="sg-tops">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="background:rgba(212,245,60,.08)">
+              <th style="padding:14px 18px;text-align:left;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--lime);border-bottom:1px solid rgba(212,245,60,.2)">SIZE</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">CHEST</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">WAIST</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">LENGTH</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">FIT</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${[
+              ['S','34 – 36','28 – 30','27"','Slim'],
+              ['M','38 – 40','32 – 34','28"','Regular'],
+              ['L','42 – 44','36 – 38','29"','Regular'],
+              ['XL','46 – 48','40 – 42','30"','Relaxed'],
+              ['XXL','50 – 52','44 – 46','31"','Relaxed'],
+            ].map(([s,c,w,l,f],i)=>`
+            <tr style="background:${i%2===0?'rgba(255,255,255,.02)':'transparent'};border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s" onmouseover="this.style.background='rgba(212,245,60,.05)'" onmouseout="this.style.background='${i%2===0?'rgba(255,255,255,.02)':'transparent'}'">
+              <td style="padding:16px 18px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--lime)">${s}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${c}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${w}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${l}</td>
+              <td style="padding:16px 18px;text-align:center"><span style="background:rgba(255,255,255,.07);padding:4px 12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">${f}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bottoms table -->
+      <div id="sg-bottoms" style="display:none">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="background:rgba(212,245,60,.08)">
+              <th style="padding:14px 18px;text-align:left;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--lime);border-bottom:1px solid rgba(212,245,60,.2)">SIZE</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">WAIST</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">HIP</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">INSEAM</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">FIT</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${[
+              ['S','28 – 30','34 – 36','30"','Slim'],
+              ['M','32 – 34','38 – 40','31"','Regular'],
+              ['L','36 – 38','42 – 44','31.5"','Regular'],
+              ['XL','40 – 42','46 – 48','32"','Relaxed'],
+              ['XXL','44 – 46','50 – 52','32.5"','Relaxed'],
+            ].map(([s,w,h,i,f],idx)=>`
+            <tr style="background:${idx%2===0?'rgba(255,255,255,.02)':'transparent'};border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s" onmouseover="this.style.background='rgba(212,245,60,.05)'" onmouseout="this.style.background='${idx%2===0?'rgba(255,255,255,.02)':'transparent'}'">
+              <td style="padding:16px 18px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--lime)">${s}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${w}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${h}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${i}</td>
+              <td style="padding:16px 18px;text-align:center"><span style="background:rgba(255,255,255,.07);padding:4px 12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">${f}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Womens table -->
+      <div id="sg-womens" style="display:none">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="background:rgba(212,245,60,.08)">
+              <th style="padding:14px 18px;text-align:left;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--lime);border-bottom:1px solid rgba(212,245,60,.2)">SIZE</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">BUST</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">WAIST</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">HIP</th>
+              <th style="padding:14px 18px;text-align:center;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--white);border-bottom:1px solid rgba(212,245,60,.2)">FIT</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${[
+              ['XS','30 – 32','23 – 25','33 – 35','Tight'],
+              ['S','33 – 35','26 – 28','36 – 38','Fitted'],
+              ['M','36 – 38','29 – 31','39 – 41','Regular'],
+              ['L','39 – 41','32 – 34','42 – 44','Regular'],
+              ['XL','42 – 44','35 – 37','45 – 47','Relaxed'],
+            ].map(([s,b,w,h,f],idx)=>`
+            <tr style="background:${idx%2===0?'rgba(255,255,255,.02)':'transparent'};border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s" onmouseover="this.style.background='rgba(212,245,60,.05)'" onmouseout="this.style.background='${idx%2===0?'rgba(255,255,255,.02)':'transparent'}'">
+              <td style="padding:16px 18px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--lime)">${s}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${b}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${w}</td>
+              <td style="padding:16px 18px;text-align:center;font-size:15px;font-weight:600;color:var(--white)">${h}</td>
+              <td style="padding:16px 18px;text-align:center"><span style="background:rgba(255,255,255,.07);padding:4px 12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">${f}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Fit tip -->
+      <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:rgba(212,245,60,.06);border-left:3px solid var(--lime);padding:16px 20px">
+          <div style="font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:6px">💡 Fit Tip</div>
+          <div style="font-size:13px;color:rgba(245,245,240,.7);line-height:1.6;font-weight:300">FORGE runs true to size. For a looser fit go up one size. For compression gear, size down for maximum support.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.03);border-left:3px solid rgba(255,255,255,.15);padding:16px 20px">
+          <div style="font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--white);margin-bottom:6px">🔄 Free Returns</div>
+          <div style="font-size:13px;color:rgba(245,245,240,.7);line-height:1.6;font-weight:300">Not the right size? We offer free exchanges within 30 days. No questions asked.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function sgTab(tab){
+  ['tops','bottoms','womens'].forEach(t=>{
+    document.getElementById('sg-'+t).style.display = t===tab?'block':'none';
+    const btn = document.getElementById('sg-tab-'+t);
+    btn.style.background = t===tab?'var(--lime)':'transparent';
+    btn.style.color = t===tab?'var(--black)':'var(--muted)';
+  });
+}
+</script>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="go('/')">FORGE</div>
+  <ul class="nav-links">
+    <li><a onclick="go('/mens')" href="#/mens">Men</a></li>
+    <li><a onclick="go('/womens')" href="#/womens">Women</a></li>
+    <li><a onclick="go('/accessories')" href="#/accessories">Accessories</a></li>
+    <li><a onclick="go('/sale')" href="#/sale">Sale</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="openSearch()" title="Search">🔍</button>
+    <button class="cart-btn" onclick="go('/wishlist')" title="Wishlist">
+      ♡ <span id="wishlist-count" style="font-size:10px;background:rgba(212,245,60,.15);color:var(--lime);padding:1px 5px;border-radius:3px">0</span>
+    </button>
+    <button id="edit-mode-btn" class="cart-btn" style="border-color:rgba(255,255,255,.2)" onclick="toggleEditMode()">📷 Add Images</button>
+    <button class="cart-btn" onclick="go('/cart')">
+      🛍 Bag <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </div>
+</nav>
+
+<div id="app"></div>
+
+<!-- FOOTER TEMPLATE -->
+<template id="footer-tpl">
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo">FORGE</div>
+      <p class="foot-desc">Built for athletes. Worn by those who refuse to settle. Performance apparel that goes as hard as you do.</p>
+      <div class="foot-socials">
+        <div class="soc">𝕏</div><div class="soc">ig</div><div class="soc">yt</div><div class="soc">tk</div>
+      </div>
+    </div>
+    <div>
+      <div class="foot-col-t">Shop</div>
+      <ul class="foot-links">
+        <li><a onclick="go('/mens')">Mens</a></li>
+        <li><a onclick="go('/womens')">Womens</a></li>
+        <li><a onclick="go('/accessories')">Accessories</a></li>
+        <li><a onclick="go('/sale')">Sale</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-col-t">Company</div>
+      <ul class="foot-links">
+        <li><a onclick="go('/about')">About Us</a></li>
+        <li><a onclick="go('/athletes')">Athletes</a></li>
+        <li><a>Sustainability</a></li>
+        <li><a>Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-col-t">Help</div>
+      <ul class="foot-links">
+        <li><a>Size Guide</a></li>
+        <li><a>Shipping Info</a></li>
+        <li><a>Returns</a></li>
+        <li><a>Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-copy">© 2026 Forge Athletics. All rights reserved.</div>
+    <div class="foot-legal">
+      <a>Privacy Policy</a><a>Terms of Use</a><a>Cookie Settings</a>
+    </div>
+  </div>
+</footer>
+</template>
+
+<script>
+// ── PRODUCTS DATA ──
+const PRODUCTS = [
+  // WOMENS
+  {id:'contour-leggings',name:'Contour Seamless Leggings',cat:'womens',type:'Bottoms',price:68,sale:null,tag:'Best Seller',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Forest Green',h:'#1e3a0f'},{n:'Slate Gray',h:'#3a3a3a'}],
+   sizes:['XS','S','M','L','XL'],oos:[],rating:4.8,reviews:1247,svgType:'leggings',
+   desc:'Our signature seamless leggings engineered for maximum performance and comfort. The 4-way stretch fabric moves with your body through every rep, squat, and sprint. High-rise waistband provides core support and stays in place no matter how intense your session.',
+   features:['4-way stretch performance fabric','High-rise supportive waistband','Squat-proof guarantee','Moisture-wicking technology','Seamless flatlock construction','Hidden waistband pocket']},
+  {id:'velocity-sports-bra',name:'Velocity Sports Bra',cat:'womens',type:'Tops',price:38,sale:null,tag:'New',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Lime Strike',h:'#d4f53c'},{n:'Blush',h:'#4a1f2e'}],
+   sizes:['XS','S','M','L','XL'],oos:[],rating:4.7,reviews:634,svgType:'bra',
+   desc:'Medium-impact sports bra with removable padding and a sleek racerback design. The smooth fabric is buttery soft and compressive enough for high-intensity training.',
+   features:['Medium-high support','Removable padding','Racerback design','Quick-dry fabric','Soft underband','Anti-odor technology']},
+  {id:'womens-training-tank',name:'FORGE Training Tank',cat:'womens',type:'Tops',price:34,sale:28,tag:'Sale',
+   colors:[{n:'White',h:'#d0cfc8'},{n:'Midnight Black',h:'#111'},{n:'Olive',h:'#2a3010'}],
+   sizes:['XS','S','M','L','XL'],oos:['XS'],rating:4.6,reviews:418,svgType:'tank-w',
+   desc:'Lightweight, breathable training tank with a relaxed fit. Designed for maximum range of motion and all-day wear. Perfect for the gym or layering under a hoodie.',
+   features:['Lightweight performance fabric','Relaxed athletic fit','Dropped armholes','Sweat-wicking','Pre-shrunk fabric','Unisex silhouette']},
+  {id:'seamless-shorts',name:'Seamless Training Shorts',cat:'womens',type:'Bottoms',price:42,sale:null,tag:null,
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Charcoal',h:'#2e2e2e'},{n:'Sage',h:'#2a3a20'}],
+   sizes:['XS','S','M','L','XL'],oos:[],rating:4.5,reviews:312,svgType:'shorts-w',
+   desc:'These seamless shorts move with you in all the right ways. The high waist band stays put through yoga, HIIT, or a morning run. Built-in liner gives you full confidence.',
+   features:['Built-in liner','High-rise waistband','4-way stretch','Squat-proof','2.5" inseam','Side pockets']},
+  {id:'womens-zip-hoodie',name:'Velocity Zip Hoodie',cat:'womens',type:'Outerwear',price:74,sale:null,tag:'New',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Limestone',h:'#c8c4b8'}],
+   sizes:['XS','S','M','L','XL'],oos:[],rating:4.9,reviews:189,svgType:'hoodie',
+   desc:'Pre and post-workout perfection. This zip hoodie is made from a premium fleece blend that\'s soft enough to sleep in. Tailored athletic cut, no bulk, just warmth.',
+   features:['Premium fleece blend','Full-zip with chin guard','Kangaroo front pockets','Thumbholes','Flatlock seams','Athletic cut']},
+  // MENS
+  {id:'apex-tee',name:'APEX Training Tee',cat:'mens',type:'Tops',price:44,sale:36,tag:'Sale',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Forge White',h:'#c8c4b8'},{n:'Olive',h:'#2a3010'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.7,reviews:892,svgType:'tee',
+   desc:'The workhorse of your wardrobe. This training tee is cut from a high-performance jersey that keeps you cool while you go hard. Slightly relaxed fit with dropped shoulders for a modern athletic look.',
+   features:['Moisture-wicking jersey fabric','Relaxed athletic fit','Dropped shoulders','Anti-odor technology','Side seam construction','Reflective FORGE tab']},
+  {id:'mens-training-shorts',name:'FORGE Training Shorts',cat:'mens',type:'Bottoms',price:52,sale:null,tag:'Best Seller',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Charcoal',h:'#2e2e2e'},{n:'Olive',h:'#2a3010'},{n:'Lime Strike',h:'#1e2a0a'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.8,reviews:1056,svgType:'shorts-m',
+   desc:'Our most popular shorts. 5" inseam, stretch-woven fabric, and a cinch waistband built for lifting and running alike. The zip pocket actually fits your phone.',
+   features:['5" inseam','Stretch-woven fabric','Zip side pockets','Cinch waistband','Split hem for mobility','Liner optional']},
+  {id:'compression-tights',name:'Pro Compression Tights',cat:'mens',type:'Bottoms',price:58,sale:null,tag:null,
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Deep Navy',h:'#0a1428'}],
+   sizes:['S','M','L','XL','XXL'],oos:['XXL'],rating:4.6,reviews:447,svgType:'leggings',
+   desc:'Engineered compression tights for enhanced muscle support and faster recovery. Graduated compression from ankle to thigh reduces fatigue so you can push harder for longer.',
+   features:['Graduated compression','4-way stretch','Flatlock seams','Reflective details','Waistband key pocket','Anti-odor treatment']},
+  {id:'mens-performance-hoodie',name:'Performance Hoodie',cat:'mens',type:'Outerwear',price:78,sale:null,tag:'New',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Charcoal',h:'#2e2e2e'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.9,reviews:234,svgType:'hoodie',
+   desc:'When it\'s cold and you still show up. This pullover hoodie is cut to perform — no flapping fabric, just a clean athletic silhouette that looks as good in the gym as it does outside.',
+   features:['Premium athletic fleece','Kangaroo pocket','Thumbholes','Ribbed cuffs and hem','Minimal branding','True-to-size athletic fit']},
+  {id:'mens-tank',name:'Training Tank',cat:'mens',type:'Tops',price:32,sale:null,tag:null,
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Forge White',h:'#c8c4b8'},{n:'Lime Strike',h:'#1e2a0a'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.5,reviews:567,svgType:'tank-m',
+   desc:'Cut for lifting. The dropped armholes give you full range of motion while the jersey fabric keeps you dry. Pair with the FORGE Shorts for the full kit.',
+   features:['Moisture-wicking jersey','Dropped armhole cut','Lightweight','Side seams','Performance fit','FORGE woven label']},
+  {id:'forge-joggers',name:'FORGE Tapered Joggers',cat:'mens',type:'Bottoms',price:64,sale:null,tag:'New',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Charcoal',h:'#2e2e2e'},{n:'Army Green',h:'#2a3010'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.8,reviews:312,svgType:'leggings',
+   desc:'Tapered joggers built for the gym and the street. Stretch-woven fabric with a clean athletic taper, deep zip pockets, and a secure drawstring waist.',
+   features:['Stretch-woven tapered fit','Deep zip side pockets','Secure drawstring waist','Ankle zip closure','Anti-odor lining','Gym-to-street versatility']},
+  {id:'long-sleeve-tee',name:'APEX Long Sleeve Tee',cat:'mens',type:'Tops',price:48,sale:null,tag:null,
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Deep Navy',h:'#0a1428'},{n:'Forge White',h:'#c8c4b8'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.6,reviews:228,svgType:'tee',
+   desc:'Long-sleeve version of our best-selling APEX Tee. Same performance fabric, same athletic cut — now with thumbholes and a longer hem for layering.',
+   features:['Performance jersey fabric','Thumbhole cuffs','Longer athletic hem','Moisture-wicking','Dropped shoulders','Flatlock seams']},
+  {id:'mens-zip-jacket',name:'Forge Zip Training Jacket',cat:'mens',type:'Outerwear',price:92,sale:null,tag:'New',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Charcoal',h:'#2e2e2e'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.9,reviews:143,svgType:'hoodie',
+   desc:'Full-zip training jacket built for warm-ups and cool-downs. Lightweight stretch woven exterior, mesh-lined interior, clean minimal silhouette.',
+   features:['Lightweight stretch-woven shell','Mesh interior lining','Full-zip with chin guard','Two zip hand pockets','Chest zip pocket','Reflective FORGE branding']},
+  {id:'mens-compression-shorts',name:'Pro Compression Shorts',cat:'mens',type:'Bottoms',price:38,sale:null,tag:null,
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Deep Navy',h:'#0a1428'},{n:'Charcoal',h:'#2e2e2e'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.7,reviews:489,svgType:'shorts-m',
+   desc:'5" inseam compression shorts for under your shorts or on their own. Graduated compression reduces muscle fatigue and flatlock seams eliminate chafing.',
+   features:['5" inseam','Graduated compression','Flatlock anti-chafe seams','Waistband key pocket','Quick-dry fabric','Wear alone or as a liner']},
+  {id:'forge-crew-sweatshirt',name:'FORGE Crew Sweatshirt',cat:'mens',type:'Outerwear',price:72,sale:60,tag:'Sale',
+   colors:[{n:'Charcoal',h:'#2e2e2e'},{n:'Midnight Black',h:'#111'},{n:'Sand',h:'#4a3e2a'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.8,reviews:376,svgType:'tee',
+   desc:'Heavyweight fleece crew built for colder months. Thick brushed interior, ribbed cuffs, boxy athletic fit. The go-to post-lift layer.',
+   features:['Heavyweight brushed fleece','Ribbed cuffs and hem','Boxy athletic fit','Kangaroo pocket','Pre-shrunk','Embroidered FORGE chest logo']},
+  {id:'mens-running-shorts',name:'Pace Running Shorts',cat:'mens',type:'Bottoms',price:44,sale:null,tag:null,
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Deep Navy',h:'#0a1428'},{n:'Lime Strike',h:'#1e2a0a'}],
+   sizes:['S','M','L','XL','XXL'],oos:[],rating:4.7,reviews:294,svgType:'shorts-m',
+   desc:'Ultralight 3" running shorts with a built-in liner and rear zip pocket. Designed to stay out of your way at any pace. Split hem gives maximum stride freedom.',
+   features:['Ultralight woven fabric','3" inseam with split hem','Built-in liner briefs','Rear zip pocket','Reflective details','Elastic waistband with drawcord']},
+  // ACCESSORIES
+  {id:'gym-bag',name:'FORGE Pro Gym Bag',cat:'accessories',type:'Bags',price:89,sale:null,tag:'Best Seller',
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Olive',h:'#2a3010'}],
+   sizes:['One Size'],oos:[],rating:4.8,reviews:423,svgType:'bag',
+   desc:'Built to be destroyed. 40L main compartment, wet/dry separation, padded straps, and a shoe pocket that actually fits size 14. This bag goes everywhere you go.',
+   features:['40L main compartment','Wet/dry shoe pocket','Padded laptop sleeve','Adjustable shoulder straps','Water-resistant exterior','Interior organizer pockets']},
+  {id:'shaker-bottle',name:'FORGE Pro Shaker',cat:'accessories',type:'Drinkware',price:24,sale:null,tag:null,
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Lime Strike',h:'#d4f53c'},{n:'Steel Gray',h:'#3a3a3a'}],
+   sizes:['700ml','1L'],oos:[],rating:4.6,reviews:891,svgType:'bottle',
+   desc:'28oz stainless shaker with BlenderBall wire whisk and leak-proof lid. Keeps your shake cold for 4 hours. Fits in standard cup holders and most bag pockets.',
+   features:['BPA-free stainless steel','BlenderBall wire whisk','Leak-proof flip cap','700ml / 24oz capacity','Dishwasher safe','Fits standard cup holders']},
+  {id:'resistance-bands',name:'Resistance Band Set',cat:'accessories',type:'Equipment',price:32,sale:null,tag:null,
+   colors:[{n:'FORGE Pack',h:'#d4f53c'}],
+   sizes:['3-Pack','5-Pack'],oos:[],rating:4.7,reviews:562,svgType:'bands',
+   desc:'5 resistance levels from 10lb to 50lb. Natural latex construction that doesn\'t snap or roll. Comes with a carry bag and exercise guide. Works for mobility, activation, and full workouts.',
+   features:['5 resistance levels','Natural latex construction','Anti-snap design','Comes with carry bag','Exercise guide included','Works for all fitness levels']},
+  {id:'training-gloves',name:'Training Gloves',cat:'accessories',type:'Equipment',price:28,sale:null,tag:null,
+   colors:[{n:'Midnight Black',h:'#111'},{n:'Charcoal',h:'#2e2e2e'}],
+   sizes:['S/M','M/L','L/XL'],oos:[],rating:4.4,reviews:234,svgType:'gloves',
+   desc:'Full-palm padding where you need it, open-back ventilation where you don\'t. Velcro wrist strap for adjustable support. Use them for lifting, cycling, or rowing.',
+   features:['Full-palm padding','Open-back ventilation','Velcro wrist support','Anti-slip grip','Machine washable','Unisex sizing']},
+];
+
+// ── WISHLIST ──
+let wishlist = JSON.parse(localStorage.getItem('forge-wishlist') || '[]');
+function saveWishlist(){localStorage.setItem('forge-wishlist',JSON.stringify(wishlist));updateWishlistCount();}
+function updateWishlistCount(){const el=document.getElementById('wishlist-count');if(el)el.textContent=wishlist.length;}
+function toggleWishlist(id){
+  const i=wishlist.indexOf(id);
+  if(i>-1){wishlist.splice(i,1);showToast('Removed from wishlist');}
+  else{wishlist.push(id);showToast('♡ Added to wishlist!');}
+  saveWishlist();
+  const path=location.hash.replace('#','')||'/';
+  route(path);
+}
+function inWishlist(id){return wishlist.includes(id);}
+
+// ── SEARCH ──
+function openSearch(){
+  const o=document.getElementById('search-overlay');
+  o.style.display='block';
+  setTimeout(()=>document.getElementById('search-input').focus(),50);
+  document.getElementById('search-results').innerHTML=`
+    <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px">POPULAR SEARCHES</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      ${['Training Shorts','Hoodies','Compression','Joggers','Tank Tops','Sale'].map(t=>`
+      <button onclick="document.getElementById('search-input').value='${t}';doSearch('${t}')" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--white);padding:8px 16px;font-size:13px;cursor:pointer;font-family:'Barlow',sans-serif;transition:all .2s" onmouseover="this.style.borderColor='var(--lime)';this.style.color='var(--lime)'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='var(--white)'">${t}</button>`).join('')}
+    </div>`;
+}
+function closeSearch(){document.getElementById('search-overlay').style.display='none';}
+function doSearch(q){
+  const res=document.getElementById('search-results');
+  if(!q.trim()){openSearch();return;}
+  const matches=PRODUCTS.filter(p=>
+    p.name.toLowerCase().includes(q.toLowerCase())||
+    p.type.toLowerCase().includes(q.toLowerCase())||
+    p.cat.toLowerCase().includes(q.toLowerCase())||
+    p.desc.toLowerCase().includes(q.toLowerCase())
+  );
+  if(!matches.length){
+    res.innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--muted)">No results for "<strong style="color:var(--white)">${q}</strong>" — try a different search.</div>`;
+    return;
+  }
+  res.innerHTML=`
+    <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px">${matches.length} RESULT${matches.length!==1?'S':''} FOR "${q.toUpperCase()}"</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px">
+      ${matches.slice(0,8).map(p=>`
+      <div onclick="closeSearch();go('/product/${p.id}')" style="background:#1a1a1a;cursor:pointer;transition:background .2s" onmouseover="this.style.background='#2e2e2e'" onmouseout="this.style.background='#1a1a1a'">
+        <div style="aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;overflow:hidden">
+          ${getProductImg(p.id,p.colors[0].h,p.svgType,120,160)}
+        </div>
+        <div style="padding:10px 12px">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">${p.cat}</div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px">${p.name}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--lime)">$${p.sale||p.price}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+    ${matches.length>8?`<div style="text-align:center;margin-top:16px"><button onclick="closeSearch();go('/mens')" style="background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--white);padding:10px 24px;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Barlow',sans-serif;font-weight:700">View All ${matches.length} Results</button></div>`:''}`;
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSearch();});
+
+// ── SIZE GUIDE ──
+function openSizeGuide(){document.getElementById('size-modal').style.display='flex';}
+
+// ── CART STATE ──
+let cart = JSON.parse(localStorage.getItem('forge-cart') || '[]');
+
+function saveCart(){
+  localStorage.setItem('forge-cart',JSON.stringify(cart));
+  updateCartCount();
+}
+
+function updateCartCount(){
+  const n = cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cart-count').textContent = n;
+}
+
+function addToCart(id,color,size,qty=1){
+  const ex = cart.find(i=>i.id===id&&i.color===color&&i.size===size);
+  if(ex){ex.qty+=qty;}else{cart.push({id,color,size,qty});}
+  saveCart();
+  showToast('✓ Added to bag!');
+}
+
+function removeFromCart(id,color,size){
+  cart = cart.filter(i=>!(i.id===id&&i.color===color&&i.size===size));
+  saveCart();
+}
+
+function updateQty(id,color,size,delta){
+  const item = cart.find(i=>i.id===id&&i.color===color&&i.size===size);
+  if(item){
+    item.qty = Math.max(1,item.qty+delta);
+    saveCart();
+    go('/cart');
+  }
+}
+
+function getProduct(id){return PRODUCTS.find(p=>p.id===id);}
+
+function cartTotal(){
+  return cart.reduce((s,i)=>{
+    const p=getProduct(i.id);
+    return s+(p?(p.sale||p.price)*i.qty:0);
+  },0);
+}
+
+// ── IMAGE STORE ──
+let imgStore = JSON.parse(localStorage.getItem('forge-imgs') || '{}');
+let editMode = false;
+
+function saveImgs(){localStorage.setItem('forge-imgs',JSON.stringify(imgStore));}
+
+function getProductImg(id,colorHex,svgType,w,h){
+  const key = id+'__'+colorHex;
+  if(imgStore[key]){
+    return `<img src="${imgStore[key]}" style="width:100%;height:100%;object-fit:cover;display:block" alt="">`;
+  }
+  return getSVG(svgType,colorHex,w,h);
+}
+
+function uploadImgFor(id,colorHex,callback){
+  const inp = document.createElement('input');
+  inp.type='file'; inp.accept='image/*';
+  inp.onchange = e=>{
+    const f=e.target.files[0]; if(!f)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      imgStore[id+'__'+colorHex]=ev.target.result;
+      saveImgs();
+      if(callback) callback();
+      showToast('✓ Image uploaded!');
+    };
+    reader.readAsDataURL(f);
+  };
+  inp.click();
+}
+
+function toggleEditMode(){
+  editMode=!editMode;
+  const btn=document.getElementById('edit-mode-btn');
+  if(btn){
+    btn.textContent=editMode?'✓ Edit Mode ON':'📷 Add Images';
+    btn.style.background=editMode?'var(--lime)':'transparent';
+    btn.style.color=editMode?'var(--black)':'var(--white)';
+    btn.style.borderColor=editMode?'var(--lime)':'rgba(255,255,255,.2)';
+  }
+  const path=location.hash.replace('#','')||'/';
+  route(path);
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ── SVG CLOTHING ILLUSTRATIONS ──
+function getSVG(type,colorHex,w=200,h=260){
+  const c=colorHex||'#2e2e2e';
+  const lighter = lightenHex(c,30);
+  const darker = darkenHex(c,20);
+  switch(type){
+    case 'leggings': return `<svg width="${w}" height="${h}" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+      <rect x="50" y="0" width="100" height="28" rx="3" fill="${lighter}"/>
+      <path d="M50 0 L150 0 L150 28 L160 28 L180 260 L105 260 L100 130 L95 260 L20 260 L40 28 L50 28 Z" fill="${c}"/>
+      <rect x="50" y="0" width="100" height="28" rx="3" fill="${lighter}" opacity=".8"/>
+      <line x1="100" y1="28" x2="100" y2="260" stroke="${darker}" stroke-width="1.5" opacity=".3"/>
+    </svg>`;
+    case 'bra': return `<svg width="${w}" height="${h}" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+      <path d="M80 40 L80 10 L90 10 L100 30 L110 10 L120 10 L120 40" stroke="${lighter}" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M30 160 L30 100 Q30 60 75 60 Q100 75 100 75 Q100 75 125 60 Q170 60 170 100 L170 160 Q170 180 100 180 Q30 180 30 160 Z" fill="${c}"/>
+      <path d="M100 75 Q100 75 100 75 L100 180" stroke="${darker}" stroke-width="1" opacity=".3"/>
+      <rect x="20" y="160" width="160" height="28" rx="12" fill="${lighter}"/>
+      <path d="M80 10 L80 40 Q80 75 100 75 Q120 75 120 40 L120 10" stroke="${c}" stroke-width="3" fill="none"/>
+    </svg>`;
+    case 'tee': return `<svg width="${w}" height="${h}" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+      <path d="M65 0 L35 50 L10 42 L18 80 L55 68 L55 260 L145 260 L145 68 L182 80 L190 42 L165 50 L135 0 Z" fill="${c}"/>
+      <path d="M65 0 L135 0 L135 0 Q100 22 100 22 Q100 22 65 0 Z" fill="${lighter}"/>
+      <line x1="55" y1="68" x2="55" y2="260" stroke="${darker}" stroke-width="1" opacity=".2"/>
+      <line x1="145" y1="68" x2="145" y2="260" stroke="${darker}" stroke-width="1" opacity=".2"/>
+    </svg>`;
+    case 'tank-w': return `<svg width="${w}" height="${h}" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70 0 L130 0 L130 0 Q100 18 100 18 Q100 18 70 0 Z" fill="${lighter}"/>
+      <path d="M70 0 L50 30 L30 20 L30 60 L65 55 L65 260 L135 260 L135 55 L170 60 L170 20 L150 30 L130 0 Z" fill="${c}"/>
+    </svg>`;
+    case 'tank-m': return `<svg width="${w}" height="${h}" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70 0 L130 0 Q100 15 100 15 Q100 15 70 0 Z" fill="${lighter}"/>
+      <path d="M70 0 L45 35 L20 24 L24 70 L60 60 L60 260 L140 260 L140 60 L176 70 L180 24 L155 35 L130 0 Z" fill="${c}"/>
+    </svg>`;
+    case 'shorts-w': return `<svg width="${w}" height="${h}" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+      <rect x="30" y="0" width="140" height="24" rx="3" fill="${lighter}"/>
+      <path d="M30 0 L170 0 L170 24 L180 24 L185 180 L108 180 L100 100 L92 180 L15 180 L20 24 L30 24 Z" fill="${c}"/>
+      <rect x="30" y="0" width="140" height="24" rx="3" fill="${lighter}" opacity=".9"/>
+      <line x1="100" y1="24" x2="100" y2="180" stroke="${darker}" stroke-width="1.5" opacity=".25"/>
+    </svg>`;
+    case 'shorts-m': return `<svg width="${w}" height="${h}" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+      <path d="M28 0 L172 0 L172 20 L185 20 L188 180 L108 180 L100 90 L92 180 L12 180 L15 20 L28 20 Z" fill="${c}"/>
+      <rect x="28" y="0" width="144" height="20" rx="2" fill="${lighter}" opacity=".85"/>
+      <line x1="100" y1="20" x2="100" y2="180" stroke="${darker}" stroke-width="1.5" opacity=".25"/>
+      <line x1="165" y1="20" x2="165" y2="100" stroke="${lighter}" stroke-width="5" opacity=".3"/>
+    </svg>`;
+    case 'hoodie': return `<svg width="${w}" height="${h}" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70 0 Q70 0 55 10 L30 55 L5 45 L10 88 L50 76 L50 260 L150 260 L150 76 L190 88 L195 45 L170 55 L145 10 Q130 0 130 0 Q115 -8 100 0 Q85 -8 70 0 Z" fill="${c}"/>
+      <path d="M70 0 Q80 -5 100 -2 Q120 -5 130 0 Q115 20 100 22 Q85 20 70 0 Z" fill="${lighter}"/>
+      <line x1="100" y1="22" x2="100" y2="260" stroke="${darker}" stroke-width="2" opacity=".2"/>
+    </svg>`;
+    case 'bag': return `<svg width="${w}" height="${h}" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="50" width="180" height="130" rx="8" fill="${c}"/>
+      <path d="M70 50 L70 30 Q70 10 100 10 Q130 10 130 30 L130 50" stroke="${lighter}" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <rect x="10" y="50" width="180" height="22" rx="4" fill="${lighter}" opacity=".4"/>
+      <rect x="30" y="110" width="140" height="3" rx="1.5" fill="${lighter}" opacity=".25"/>
+      <rect x="30" y="122" width="100" height="3" rx="1.5" fill="${lighter}" opacity=".25"/>
+      <text x="100" y="168" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="22" fill="${lighter}" opacity=".5" letter-spacing="3">FORGE</text>
+    </svg>`;
+    case 'bottle': return `<svg width="${w}" height="${h}" viewBox="0 0 120 260" xmlns="http://www.w3.org/2000/svg">
+      <rect x="40" y="0" width="40" height="20" rx="4" fill="${lighter}"/>
+      <path d="M30 20 L30 32 Q20 36 20 50 L20 230 Q20 248 60 248 Q100 248 100 230 L100 50 Q100 36 90 32 L90 20 Z" fill="${c}"/>
+      <rect x="30" y="50" width="60" height="16" fill="${lighter}" opacity=".3"/>
+      <text x="60" y="160" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="18" fill="${lighter}" opacity=".4" letter-spacing="2">FORGE</text>
+    </svg>`;
+    case 'bands': return `<svg width="${w}" height="${h}" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="110" cy="90" rx="95" ry="40" fill="none" stroke="${c}" stroke-width="18" opacity="1"/>
+      <ellipse cx="110" cy="90" rx="95" ry="40" fill="none" stroke="${lighter}" stroke-width="14" opacity=".15"/>
+      <ellipse cx="110" cy="75" rx="78" ry="32" fill="none" stroke="${darker}" stroke-width="12" opacity=".8"/>
+      <ellipse cx="110" cy="105" rx="58" ry="25" fill="none" stroke="${c}" stroke-width="10" opacity=".7"/>
+    </svg>`;
+    case 'gloves': return `<svg width="${w}" height="${h}" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 100 L40 220 L160 220 L160 100 Q160 60 130 50 L120 48 L120 20 Q120 5 108 5 Q96 5 96 20 L96 48 L86 46 Q56 50 40 100 Z" fill="${c}"/>
+      <rect x="60" y="180" width="80" height="16" rx="3" fill="${lighter}" opacity=".5"/>
+      <line x1="96" y1="48" x2="96" y2="120" stroke="${darker}" stroke-width="1.5" opacity=".3"/>
+      <line x1="120" y1="48" x2="120" y2="120" stroke="${darker}" stroke-width="1.5" opacity=".3"/>
+    </svg>`;
+    default: return `<svg width="${w}" height="${h}" viewBox="0 0 200 260"><rect width="200" height="260" fill="${c}" rx="8"/></svg>`;
+  }
+}
+
+function lightenHex(hex,amt){
+  let r=parseInt(hex.slice(1,3)||'11',16)+amt;
+  let g=parseInt(hex.slice(3,5)||'11',16)+amt;
+  let b=parseInt(hex.slice(5,7)||'11',16)+amt;
+  return '#'+[r,g,b].map(v=>Math.min(255,v).toString(16).padStart(2,'0')).join('');
+}
+function darkenHex(hex,amt){return lightenHex(hex,-amt);}
+
+function starsHTML(rating){
+  let s='';
+  for(let i=1;i<=5;i++)s+=i<=Math.floor(rating)?'★':(rating-i+1>0?'½':'☆');
+  return s;
+}
+
+// ── ROUTER ──
+function go(path){
+  history.pushState(null,null,'#'+path);
+  route(path);
+}
+
+function route(path){
+  window.scrollTo(0,0);
+  const app = document.getElementById('app');
+  if(path==='/'||path==='') renderHome(app);
+  else if(path==='/mens') renderCollection(app,'mens');
+  else if(path==='/womens') renderCollection(app,'womens');
+  else if(path==='/accessories') renderCollection(app,'accessories');
+  else if(path==='/sale') renderCollection(app,'sale');
+  else if(path==='/wishlist') renderWishlist(app);
+  else if(path==='/checkout') renderCheckout(app);
+  else if(path==='/confirmation') renderConfirmation(app);
+  else if(path.startsWith('/product/')) renderProduct(app,path.replace('/product/',''));
+  else renderHome(app);
+}
+
+window.addEventListener('popstate',()=>{
+  const path = location.hash.replace('#','') || '/';
+  route(path);
+});
+
+// ── HOME ──
+function renderHome(app){
+  const featProds = ['apex-tee','mens-training-shorts','mens-performance-hoodie','mens-tank'];
+  app.innerHTML = `
+  ${editMode?`<div class="edit-mode-banner">📷 EDIT MODE ON — Click any product image to upload a photo. Click "Add Images" in the nav to exit.</div>`:''}
+  <div class="ticker"><div class="ticker-track">
+    ${['Free Returns ✦','New Drop: APEX Pro Series ✦','Free Shipping Over $50 ✦','30-Day Fit Guarantee ✦','Sustainable Materials ✦',
+       'Free Returns ✦','New Drop: APEX Pro Series ✦','Free Shipping Over $50 ✦','30-Day Fit Guarantee ✦','Sustainable Materials ✦'].map(t=>`<span class="ticker-item">${t}</span>`).join('')}
+  </div></div>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">New Collection 2026</div>
+      <h1 class="hero-title">BUILT<br>FOR THE<br><em>GRIND</em></h1>
+      <p class="hero-sub">Performance apparel engineered for athletes who refuse to stop. Every stitch, every seam — designed to move with you.</p>
+      <div class="ctas">
+        <button class="btn btn-lime btn-lg" onclick="go('/mens')">Shop Men</button>
+        <button class="btn btn-outline btn-lg" onclick="go('/womens')">Shop Women</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div style="opacity:.18;position:absolute">${getSVG('hoodie','#d4f53c',260,340)}</div>
+      <div style="position:absolute;bottom:36px;right:36px;background:var(--lime);color:var(--black);width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Barlow',sans-serif;font-weight:800;font-size:11px;letter-spacing:1px;text-align:center;line-height:1.3;">FREE<br>🚚<br>$50+</div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-n">2M+</div><div class="stat-l">Athletes Worldwide</div></div>
+    <div class="stat"><div class="stat-n">98%</div><div class="stat-l">5-Star Reviews</div></div>
+    <div class="stat"><div class="stat-n">180+</div><div class="stat-l">Countries Shipped</div></div>
+    <div class="stat"><div class="stat-n">0%</div><div class="stat-l">Compromise</div></div>
+  </div>
+
+  <div id="products">
+    <div class="sec-hd">
+      <div><div class="sec-ey">New Arrivals</div><h2 class="sec-title">FEATURED<br>DROPS</h2></div>
+      <div class="view-all" onclick="go('/mens')">View All Mens</div>
+    </div>
+    <div class="prod-grid">${featProds.map(id=>productCardHTML(id)).join('')}</div>
+  </div>
+
+  <div class="sec-hd">
+    <div><div class="sec-ey">Shop By</div><h2 class="sec-title">CATEGORIES</h2></div>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card" onclick="go('/mens')">
+      <div class="cat-bg" style="background:linear-gradient(135deg,#1a1a1a,#0e1a0a)">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:130px;color:rgba(255,255,255,.03)">MEN</div>
+        <div style="position:absolute;opacity:.15">${getSVG('tee','#d4f53c',160,200)}</div>
+      </div>
+      <div class="cat-content"><div class="cat-ey">Collection</div><div class="cat-name">MENS</div><div class="cat-arr">→</div></div>
+    </div>
+    <div class="cat-card" onclick="go('/womens')">
+      <div class="cat-bg" style="background:linear-gradient(135deg,#1a0f0f,#1a1a1a)">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:110px;color:rgba(255,255,255,.03)">WOMEN</div>
+        <div style="position:absolute;opacity:.15">${getSVG('leggings','#d4f53c',140,200)}</div>
+      </div>
+      <div class="cat-content"><div class="cat-ey">Collection</div><div class="cat-name">WOMENS</div><div class="cat-arr">→</div></div>
+    </div>
+    <div class="cat-card" onclick="go('/accessories')">
+      <div class="cat-bg" style="background:linear-gradient(135deg,#0a0f1a,#1a1a1a)">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:90px;color:rgba(255,255,255,.03)">GEAR</div>
+        <div style="position:absolute;opacity:.15">${getSVG('bag','#d4f53c',160,180)}</div>
+      </div>
+      <div class="cat-content"><div class="cat-ey">Gear</div><div class="cat-name">ACCESSORIES</div><div class="cat-arr">→</div></div>
+    </div>
+  </div>
+
+  <div class="feature-strip">
+    <div class="feature-left">
+      <div class="feature-pre">Performance Tech</div>
+      <div class="feature-title">FORGE<br>PRO<br>SERIES</div>
+      <p class="feature-body">Our most technically advanced line yet. 4-way stretch, moisture-wicking fabric, and zero restrictions. Made for the athlete inside you.</p>
+      <button class="btn btn-dark btn-lg" onclick="go('/mens')">Explore Pro Series</button>
+    </div>
+    <div class="feature-right" style="display:flex;align-items:center;justify-content:center;padding:48px">
+      <div style="opacity:.3">${getSVG('tee','#d4f53c',200,240)}</div>
+    </div>
+  </div>
+
+  <div class="perks">
+    <div class="perk"><div class="perk-icon">🚚</div><div class="perk-t">Free Shipping</div><div class="perk-s">On all orders over $50. Fast, tracked delivery worldwide.</div></div>
+    <div class="perk"><div class="perk-icon">🔄</div><div class="perk-t">Easy Returns</div><div class="perk-s">30-day hassle-free returns. No questions asked.</div></div>
+    <div class="perk"><div class="perk-icon">🛡️</div><div class="perk-t">Fit Guarantee</div><div class="perk-s">If it doesn't fit perfectly, we make it right.</div></div>
+    <div class="perk"><div class="perk-icon">🌱</div><div class="perk-t">Sustainable</div><div class="perk-s">Recycled materials. Ethical manufacturing. No excuses.</div></div>
+  </div>
+
+  <div class="newsletter">
+    <div class="nl-title">JOIN THE <em>FORGE</em> FAMILY</div>
+    <p class="nl-sub">Get early access to drops, exclusive offers, and training content.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="Your email address">
+      <button class="nl-btn" onclick="showToast('✓ You\'re in!')">Subscribe</button>
+    </div>
+  </div>
+  ${footerHTML()}`;
+}
+
+// ── PRODUCT CARD ──
+function productCardHTML(id){
+  const p = getProduct(id);
+  if(!p) return '';
+  const colorHex = p.colors[0].h;
+  const imgHTML = getProductImg(p.id,colorHex,p.svgType,180,240);
+  const hasImg = !!imgStore[p.id+'__'+colorHex];
+  const isWished = inWishlist(p.id);
+  const uploadOverlay = editMode
+    ? `<div class="upload-overlay" onclick="event.stopPropagation();uploadImgFor('${p.id}','${colorHex}',()=>route(location.hash.replace('#','')||'/'))">
+        ${hasImg?'🔄 Replace Photo':'📷 Add Photo'}
+       </div>`
+    : '';
+  return `<div class="pcard" onclick="${editMode?'':` go('/product/${p.id}')`}">
+    <div class="pcard-img">
+      <div class="pcard-img-inner${editMode?' edit-mode-card':''}">${imgHTML}</div>
+      ${p.tag?`<div class="pcard-badge${p.tag==='Sale'?' sale':''}">${p.tag}</div>`:''}
+      <button onclick="event.stopPropagation();toggleWishlist('${p.id}')" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,.5);border:none;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:3" title="${isWished?'Remove from wishlist':'Save to wishlist'}">${isWished?'♥':'♡'}</button>
+      ${uploadOverlay}
+      ${!editMode?`<div class="pcard-overlay">Quick Add</div>`:''}
+    </div>
+    <div class="pcard-info">
+      <div class="pcard-cat">${p.cat==='accessories'?p.type:p.cat+' / '+p.type}</div>
+      <div class="pcard-name">${p.name}</div>
+      <div class="swatches">${p.colors.map(c=>`<div class="sw" style="background:${c.h}" title="${c.n}"></div>`).join('')}</div>
+      <div class="pcard-price">
+        <span class="price-main">$${p.sale||p.price}</span>
+        ${p.sale?`<span class="price-was">$${p.price}</span>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── COLLECTION PAGE ──
+function renderCollection(app,cat){
+  let products = cat==='sale'
+    ? PRODUCTS.filter(p=>p.sale)
+    : PRODUCTS.filter(p=>p.cat===cat);
+
+  const catLabel = {mens:'Mens',womens:'Womens',accessories:'Accessories',sale:'Sale'}[cat]||cat;
+
+  app.innerHTML = `
+  ${editMode?`<div class="edit-mode-banner">📷 EDIT MODE ON — Click any product image to upload a photo</div>`:''}
+  <div class="collection-page">
+    <div class="coll-header">
+      <div><div class="sec-ey">${cat==='sale'?'Up to 40% Off':'Collection'}</div>
+      <div class="coll-title">${catLabel.toUpperCase()}</div>
+      <div class="coll-count">${products.length} products</div></div>
+    </div>
+    <div class="coll-layout">
+      <div class="filter-sidebar">
+        <div class="filter-group">
+          <div class="filter-label">Category</div>
+          <div class="filter-opts">
+            ${[...new Set(products.map(p=>p.type))].map(t=>`
+            <label class="filter-opt"><input type="checkbox" checked> ${t}</label>`).join('')}
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Size</div>
+          <div class="filter-opts">
+            ${['XS','S','M','L','XL','XXL'].map(s=>`<label class="filter-opt"><input type="checkbox"> ${s}</label>`).join('')}
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Price Range</div>
+          <div class="filter-opts">
+            ${['Under $30','$30 – $50','$50 – $80','Over $80'].map(r=>`<label class="filter-opt"><input type="checkbox"> ${r}</label>`).join('')}
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Color</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+            ${[{n:'Black',h:'#111'},{n:'Green',h:'#1e3a0f'},{n:'Gray',h:'#3a3a3a'},{n:'Lime',h:'#d4f53c'},{n:'White',h:'#ccc'}].map(c=>`
+            <div title="${c.n}" style="width:22px;height:22px;border-radius:50%;background:${c.h};border:2px solid rgba(255,255,255,.15);cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='var(--lime)'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)'"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sort-bar">
+          <span class="sort-count">${products.length} products</span>
+          <select class="sort-sel">
+            <option>Featured</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Best Sellers</option>
+            <option>Newest</option>
+          </select>
+        </div>
+        <div class="coll-grid">${products.map(p=>productCardHTML(p.id)).join('')}</div>
+      </div>
+    </div>
+  </div>
+  ${footerHTML()}`;
+}
+
+// ── PRODUCT DETAIL ──
+function renderProduct(app,id){
+  const p = getProduct(id);
+  if(!p){renderHome(app);return;}
+
+  let selColor = p.colors[0];
+  let selSize = p.sizes.find(s=>!p.oos.includes(s))||p.sizes[0];
+  let qty = 1;
+
+  const related = PRODUCTS.filter(r=>r.cat===p.cat&&r.id!==p.id).slice(0,4);
+
+  const fakeReviews = [
+    {name:'Jordan T.',date:'Feb 2026',rating:5,title:'Best leggings I\'ve ever owned',body:'I\'ve tried every brand and these are by far the most comfortable and supportive. Worn them through 6 weeks of leg days and they still look brand new.',verified:true},
+    {name:'Sam R.',date:'Jan 2026',rating:5,title:'Finally found my go-to',body:'The quality is insane for the price. Stitching is solid, fabric doesn\'t pill, and the fit is perfect. Already ordered two more colors.',verified:true},
+    {name:'Alex K.',date:'Jan 2026',rating:4,title:'Great but size up',body:'Amazing quality and look great. I\'m usually an M but went with L and it\'s perfect — recommend sizing up one.',verified:false},
+  ];
+
+  function rebuild(){
+    app.innerHTML = buildProductHTML();
+    attachProductEvents();
+  }
+
+  function buildProductHTML(){
+    return `
+  <div class="pd-page">
+    <div class="breadcrumb">
+      <span onclick="go('/')">Home</span><span class="sep">/</span>
+      <span onclick="go('/${p.cat}')">${p.cat.charAt(0).toUpperCase()+p.cat.slice(1)}</span><span class="sep">/</span>
+      <span style="color:var(--white)">${p.name}</span>
+    </div>
+    <div class="pd-layout">
+      <div class="pd-imgs">
+        <div class="pd-main-img" style="position:relative">
+          ${getProductImg(p.id,selColor.h,p.svgType,300,400)}
+          ${editMode?`<div class="upload-overlay upload-overlay-lg" onclick="uploadImgFor('${p.id}','${selColor.h}',rebuild)">
+            ${imgStore[p.id+'__'+selColor.h]?'🔄 Replace Photo for '+selColor.n:'📷 Add Photo for '+selColor.n}
+          </div>`:''}
+        </div>
+        <div class="pd-thumbs">
+          ${p.colors.map((c)=>`<div class="pd-thumb${c.n===selColor.n?' active':''}" style="position:relative" onclick="selectColor('${c.n}')">
+            ${getProductImg(p.id,c.h,p.svgType,60,80)}
+            ${editMode?`<div class="upload-overlay-thumb" onclick="event.stopPropagation();uploadImgFor('${p.id}','${c.h}',rebuild)" title="Upload photo for ${c.n}">📷</div>`:''}
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="pd-info">
+        ${p.tag?`<div class="pd-badge">${p.tag}</div>`:''}
+        <div class="pd-name">${p.name}</div>
+        <div class="pd-rating">
+          <span class="stars">${starsHTML(p.rating)}</span>
+          <span class="rating-count">${p.rating} (${p.reviews.toLocaleString()} reviews)</span>
+        </div>
+        <div class="pd-price">
+          $${p.sale||p.price}
+          ${p.sale?`<span class="pd-price-was">$${p.price}</span>`:''}
+        </div>
+        <p class="pd-desc">${p.desc}</p>
+
+        <div class="pd-opt-label">Color: <b style="color:var(--white);font-family:'Barlow',sans-serif;font-weight:600;letter-spacing:0">${selColor.n}</b></div>
+        <div class="color-opts" id="color-opts">
+          ${p.colors.map(c=>`<div class="color-opt${c.n===selColor.n?' active':''}" style="background:${c.h}" data-color="${c.n}" title="${c.n}" onclick="selectColor('${c.n}')"></div>`).join('')}
+        </div>
+
+        <div class="pd-opt-label">Size: <b style="color:var(--white);font-family:'Barlow',sans-serif;font-weight:600;letter-spacing:0">${selSize}</b> <span onclick="openSizeGuide()" style="cursor:pointer">Size Guide ↗</span></div>
+        <div class="size-opts" id="size-opts">
+          ${p.sizes.map(s=>`<button class="size-opt${s===selSize?' active':''}${p.oos.includes(s)?' oos':''}" data-size="${s}" ${p.oos.includes(s)?'disabled':''} onclick="selectSize('${s}')">${s}</button>`).join('')}
+        </div>
+
+        <div class="qty-row">
+          <div class="qty-ctrl">
+            <button onclick="changeQty(-1)">−</button>
+            <span id="qty-val">${qty}</span>
+            <button onclick="changeQty(1)">+</button>
+          </div>
+          <button class="atb-btn" id="atb-btn" onclick="doAddToCart()">Add to Bag</button>
+          <button onclick="toggleWishlist('${p.id}')" style="width:48px;height:52px;background:transparent;border:1.5px solid rgba(255,255,255,.2);color:${inWishlist(p.id)?'var(--lime)':'var(--white)'};font-size:22px;cursor:pointer;transition:all .2s;flex-shrink:0" title="${inWishlist(p.id)?'Saved!':'Save to wishlist'}">${inWishlist(p.id)?'♥':'♡'}</button>
+        </div>
+
+        <div class="pd-features">
+          ${p.features.map(f=>`<div class="feat-item">${f}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reviews-section">
+    <div class="sec-hd" style="padding:0 0 32px">
+      <div><div class="sec-ey">Customer Feedback</div><h2 class="sec-title">REVIEWS</h2></div>
+    </div>
+    <div class="reviews-summary">
+      <div style="text-align:center">
+        <div class="rev-big-num">${p.rating}</div>
+        <div class="rev-stars-big">${starsHTML(p.rating)}</div>
+        <div class="rev-total">${p.reviews.toLocaleString()} reviews</div>
+      </div>
+      <div class="rev-bars">
+        ${[[5,78],[4,14],[3,5],[2,2],[1,1]].map(([s,pct])=>`
+        <div class="rev-bar-row">
+          <span class="rev-bar-label">${s}★</span>
+          <div class="rev-bar-track"><div class="rev-bar-fill" style="width:${pct}%"></div></div>
+          <span class="rev-bar-count">${pct}%</span>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="review-cards">
+      ${fakeReviews.map(r=>`
+      <div class="review-card">
+        <div class="rev-header"><span class="rev-name">${r.name}</span><span class="rev-date">${r.date}</span></div>
+        <div class="rev-stars">${starsHTML(r.rating)}</div>
+        <div class="rev-title">${r.title}</div>
+        <div class="rev-body">${r.body}</div>
+        ${r.verified?`<div class="rev-verified">✓ Verified Purchase</div>`:''}
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <div class="related-section">
+    <div class="sec-hd" style="padding:48px 0 28px">
+      <div><div class="sec-ey">You Might Also Like</div><h2 class="sec-title">RELATED</h2></div>
+    </div>
+    <div class="prod-grid cols-3" style="padding:0">${related.map(r=>productCardHTML(r.id)).join('')}</div>
+  </div>
+  ${footerHTML()}`;
+  }
+
+  function attachProductEvents(){
+    window.selectColor = function(colorName){
+      selColor = p.colors.find(c=>c.n===colorName)||p.colors[0];
+      rebuild();
+    };
+    window.selectSize = function(size){
+      if(!p.oos.includes(size)) selSize=size;
+      rebuild();
+    };
+    window.changeQty = function(d){
+      qty=Math.max(1,qty+d);
+      const el=document.getElementById('qty-val');
+      if(el) el.textContent=qty;
+    };
+    window.doAddToCart = function(){
+      if(!selSize){showToast('Please select a size');return;}
+      addToCart(p.id,selColor.n,selSize,qty);
+      const btn=document.getElementById('atb-btn');
+      if(btn){btn.textContent='✓ Added!';btn.classList.add('atb-success');}
+      setTimeout(()=>{if(btn){btn.textContent='Add to Bag';btn.classList.remove('atb-success');}},1800);
+    };
+  }
+
+  app.innerHTML = buildProductHTML();
+  attachProductEvents();
+}
+
+// ── WISHLIST PAGE ──
+function renderWishlist(app){
+  const items = wishlist.map(id=>getProduct(id)).filter(Boolean);
+  app.innerHTML=`
+  <div class="cart-page">
+    <h1 class="cart-title">WISHLIST <span style="color:var(--lime);font-size:.5em">(${items.length} saved)</span></h1>
+    ${items.length===0?`
+    <div class="empty-cart">
+      <div class="empty-cart-icon">♡</div>
+      <div class="empty-cart-t">NOTHING SAVED YET</div>
+      <p class="empty-cart-s">Hit the heart on any product to save it here.</p>
+      <button class="btn btn-lime btn-lg" onclick="go('/mens')">Browse Mens</button>
+    </div>`:`
+    <div class="prod-grid" style="padding:0 0 72px">
+      ${items.map(p=>productCardHTML(p.id)).join('')}
+    </div>`}
+  </div>
+  ${footerHTML()}`;
+}
+
+// ── CART ──
+function renderCart(app){
+  if(cart.length===0){
+    app.innerHTML=`
+    <div class="cart-page">
+      <div class="empty-cart">
+        <div class="empty-cart-icon">🛍</div>
+        <div class="empty-cart-t">YOUR BAG IS EMPTY</div>
+        <p class="empty-cart-s">Looks like you haven't added anything yet.</p>
+        <button class="btn btn-lime btn-lg" onclick="go('/')">Start Shopping</button>
+      </div>
+    </div>${footerHTML()}`;
+    return;
+  }
+
+  const subtotal = cartTotal();
+  const shipping = subtotal>=50?0:6.99;
+  const total = subtotal+shipping;
+
+  app.innerHTML=`
+  <div class="cart-page">
+    <h1 class="cart-title">YOUR BAG <span style="color:var(--lime);font-size:0.5em">(${cart.reduce((s,i)=>s+i.qty,0)} items)</span></h1>
+    <div class="cart-layout">
+      <div>
+        <div class="cart-items">
+          ${cart.map(item=>{
+            const p=getProduct(item.id);
+            if(!p) return '';
+            return `<div class="cart-item">
+              <div class="cart-item-img" onclick="go('/product/${p.id}')" style="cursor:pointer">
+                ${getProductImg(p.id,p.colors.find(c=>c.n===item.color)?.h||p.colors[0].h,p.svgType,100,133)}
+              </div>
+              <div class="cart-item-info">
+                <div>
+                  <div class="cart-item-name" onclick="go('/product/${p.id}')">${p.name}</div>
+                  <div class="cart-item-meta">${item.color} · Size ${item.size}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                  <div class="cart-item-qty">
+                    <button onclick="updateQty('${p.id}','${item.color}','${item.size}',-1)">−</button>
+                    <span>${item.qty}</span>
+                    <button onclick="updateQty('${p.id}','${item.color}','${item.size}',1)">+</button>
+                  </div>
+                  <div class="cart-remove" onclick="removeItem('${p.id}','${item.color}','${item.size}')">Remove</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="cart-item-price">$${((p.sale||p.price)*item.qty).toFixed(2)}</div>
+                ${p.sale?`<div style="font-size:12px;color:var(--muted);text-decoration:line-through;margin-top:4px">$${(p.price*item.qty).toFixed(2)}</div>`:''}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="cart-summary">
+          <div class="cart-summary-title">ORDER SUMMARY</div>
+          <div class="summary-rows">
+            <div class="summary-row"><span>Subtotal</span><span class="val">$${subtotal.toFixed(2)}</span></div>
+            <div class="summary-row"><span>Shipping</span><span class="val" style="${shipping===0?'color:var(--lime)':''}">${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>
+            <div class="summary-row"><span>Tax (est.)</span><span class="val">$${(subtotal*0.08).toFixed(2)}</span></div>
+          </div>
+          ${shipping>0?`<div class="free-ship">Add $${(50-subtotal).toFixed(2)} more for FREE shipping</div>`:'<div class="free-ship">🎉 You qualify for free shipping!</div>'}
+          <div class="summary-row total"><span>Total</span><span class="val" style="color:var(--lime)">$${(total+subtotal*0.08).toFixed(2)}</span></div>
+          <div style="margin-top:20px">
+            <div class="promo-row">
+              <input class="promo-input" placeholder="Promo code">
+              <button class="promo-btn" onclick="showToast('Code applied! 10% off')">Apply</button>
+            </div>
+            <button class="btn btn-lime btn-full btn-lg" onclick="go('/checkout')">Proceed to Checkout →</button>
+            <button class="btn btn-outline btn-full" style="margin-top:10px" onclick="go('/')">Continue Shopping</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  ${footerHTML()}`;
+
+  window.removeItem = function(id,color,size){
+    removeFromCart(id,color,size);
+    renderCart(app);
+  };
+}
+
+// ── CHECKOUT ──
+function renderCheckout(app){
+  const subtotal = cartTotal();
+  const shipping = subtotal>=50?0:6.99;
+  const tax = subtotal*0.08;
+  const total = subtotal+shipping+tax;
+
+  app.innerHTML=`
+  <div class="checkout-page">
+    <h1 class="checkout-title">CHECKOUT</h1>
+    <div class="checkout-layout">
+      <div>
+        <div class="checkout-section">
+          <div class="checkout-section-title">Contact Information</div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="Jordan"></div>
+            <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Smith"></div>
+          </div>
+          <div class="form-grid full" style="margin-top:14px">
+            <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="jordan@example.com"></div>
+            <div class="form-group" style="margin-top:14px"><label class="form-label">Phone (optional)</label><input class="form-input" type="tel" placeholder="+1 (555) 000-0000"></div>
+          </div>
+        </div>
+
+        <div class="checkout-section">
+          <div class="checkout-section-title">Shipping Address</div>
+          <div class="form-grid full">
+            <div class="form-group"><label class="form-label">Street Address</label><input class="form-input" placeholder="123 Main St"></div>
+            <div class="form-group" style="margin-top:14px"><label class="form-label">Apartment / Suite (optional)</label><input class="form-input" placeholder="Apt 4B"></div>
+          </div>
+          <div class="form-grid" style="margin-top:14px">
+            <div class="form-group"><label class="form-label">City</label><input class="form-input" placeholder="Los Angeles"></div>
+            <div class="form-group"><label class="form-label">State</label>
+              <select class="form-input form-select">
+                <option>California</option><option>New York</option><option>Texas</option><option>Florida</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top:14px">
+            <div class="form-group"><label class="form-label">ZIP Code</label><input class="form-input" placeholder="90001"></div>
+            <div class="form-group"><label class="form-label">Country</label>
+              <select class="form-input form-select"><option>United States</option><option>Canada</option><option>United Kingdom</option><option>Australia</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-section">
+          <div class="checkout-section-title">Shipping Method</div>
+          ${[
+            ['Standard (5-7 days)',shipping===0?'FREE':'$6.99',true],
+            ['Express (2-3 days)','$12.99',false],
+            ['Overnight','$24.99',false],
+          ].map(([label,price,sel])=>`
+          <label style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--gray);border:1.5px solid ${sel?'var(--lime)':'rgba(255,255,255,.08)'};margin-bottom:8px;cursor:pointer">
+            <input type="radio" name="shipping" ${sel?'checked':''} style="accent-color:var(--lime)">
+            <span style="flex:1;font-weight:600;font-size:14px">${label}</span>
+            <span style="color:var(--lime);font-weight:700">${price}</span>
+          </label>`).join('')}
+        </div>
+
+        <div class="checkout-section">
+          <div class="checkout-section-title">Payment Details</div>
+          <div class="card-icons">
+            <div class="card-icon">VISA</div><div class="card-icon">MC</div><div class="card-icon">AMEX</div><div class="card-icon">PAYPAL</div>
+          </div>
+          <div class="form-grid full">
+            <div class="form-group"><label class="form-label">Card Number</label><input class="form-input" placeholder="1234 5678 9012 3456" maxlength="19" oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(.{4})/g,'$1 ').trim()"></div>
+          </div>
+          <div class="form-grid" style="margin-top:14px">
+            <div class="form-group"><label class="form-label">Expiry Date</label><input class="form-input" placeholder="MM / YY" maxlength="7"></div>
+            <div class="form-group"><label class="form-label">Security Code</label><input class="form-input" placeholder="CVV" maxlength="4"></div>
+          </div>
+          <div class="form-group" style="margin-top:14px"><label class="form-label">Name on Card</label><input class="form-input" placeholder="Jordan Smith"></div>
+        </div>
+
+        <button class="btn btn-lime btn-full btn-lg" style="margin-bottom:12px" onclick="placeOrder()">Place Order — $${total.toFixed(2)}</button>
+        <div class="secure-badge">🔒 Secure 256-bit SSL encryption</div>
+      </div>
+
+      <div>
+        <div class="checkout-summary">
+          <div class="checkout-sum-title">YOUR ORDER</div>
+          <div class="chk-items">
+            ${cart.map(item=>{
+              const p=getProduct(item.id);
+              if(!p) return '';
+              return `<div class="chk-item">
+                <div class="chk-item-img">
+                  ${getProductImg(p.id,p.colors.find(c=>c.n===item.color)?.h||p.colors[0].h,p.svgType,48,64)}
+                  <div class="chk-item-badge">${item.qty}</div>
+                </div>
+                <div class="chk-item-info">
+                  <div class="chk-item-name">${p.name}</div>
+                  <div class="chk-item-meta">${item.color} · ${item.size}</div>
+                </div>
+                <div class="chk-item-price">$${((p.sale||p.price)*item.qty).toFixed(2)}</div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div class="chk-rows">
+            <div class="chk-row"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+            <div class="chk-row"><span>Shipping</span><span style="${shipping===0?'color:var(--lime)':''}">${shipping===0?'FREE':'$'+shipping.toFixed(2)}</span></div>
+            <div class="chk-row"><span>Tax</span><span>$${tax.toFixed(2)}</span></div>
+          </div>
+          <div class="chk-total"><span>Total</span><span style="color:var(--lime)">$${total.toFixed(2)}</span></div>
+          <div class="secure-badge" style="justify-content:center">🔒 100% Secure Checkout</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  window.placeOrder = function(){
+    cart=[];
+    saveCart();
+    go('/confirmation');
+  };
+}
+
+// ── CONFIRMATION ──
+function renderConfirmation(app){
+  const orderId = 'FRG-'+Math.random().toString(36).substr(2,8).toUpperCase();
+  app.innerHTML=`
+  <div class="confirm-page">
+    <div class="confirm-box">
+      <div class="confirm-check">✓</div>
+      <div class="confirm-title">ORDER CONFIRMED</div>
+      <p class="confirm-sub">Thank you for your order! We're getting it ready.</p>
+      <p class="confirm-order" style="margin-bottom:24px">Order ${orderId}</p>
+      <div class="confirm-details">
+        <div class="confirm-detail-row"><span class="key">Status</span><span class="val" style="color:var(--lime)">Processing</span></div>
+        <div class="confirm-detail-row"><span class="key">Estimated Delivery</span><span class="val">5–7 Business Days</span></div>
+        <div class="confirm-detail-row"><span class="key">Shipping Method</span><span class="val">Standard Free Shipping</span></div>
+        <div class="confirm-detail-row"><span class="key">Confirmation</span><span class="val">Sent to your email</span></div>
+      </div>
+      <button class="btn btn-lime btn-full btn-lg" onclick="go('/')">Continue Shopping</button>
+      <button class="btn btn-outline btn-full" style="margin-top:10px" onclick="go('/mens')">Explore More</button>
+    </div>
+  </div>`;
+}
+
+// ── FOOTER ──
+function footerHTML(){
+  return `<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo">FORGE</div>
+      <p class="foot-desc">Built for athletes. Worn by those who refuse to settle. Performance apparel that goes as hard as you do.</p>
+      <div class="foot-socials">
+        <div class="soc">𝕏</div><div class="soc">ig</div><div class="soc">yt</div><div class="soc">tk</div>
+      </div>
+    </div>
+    <div>
+      <div class="foot-col-t">Shop</div>
+      <ul class="foot-links">
+        <li><a onclick="go('/mens')">Mens</a></li>
+        <li><a onclick="go('/womens')">Womens</a></li>
+        <li><a onclick="go('/accessories')">Accessories</a></li>
+        <li><a onclick="go('/sale')">Sale</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-col-t">Company</div>
+      <ul class="foot-links">
+        <li><a>About Us</a></li><li><a>Athletes</a></li><li><a>Sustainability</a></li><li><a>Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="foot-col-t">Help</div>
+      <ul class="foot-links">
+        <li><a>Size Guide</a></li><li><a>Shipping Info</a></li><li><a>Returns</a></li><li><a>Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-copy">© 2026 Forge Athletics. All rights reserved.</div>
+    <div class="foot-legal"><a>Privacy Policy</a><a>Terms of Use</a><a>Cookie Settings</a></div>
+  </div>
+</footer>`;
+}
+
+// ── INIT ──
+updateCartCount();
+updateWishlistCount();
+const initPath = location.hash.replace('#','') || '/';
+route(initPath);
+</script>
+</body>
+</html>
