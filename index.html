@@ -1934,11 +1934,19 @@ function checkPasscode(code) {
         inp.focus();
         return;
       }
-      return snap.docs[0].ref.update({ used: true }).then(function() {
+      var doc = snap.docs[0];
+      var reusable = doc.data().reusable === true;
+      if(reusable) {
         document.getElementById('passcode-modal').style.display = 'none';
         window._termsUnlocked = true;
         go('/terms');
-      });
+      } else {
+        return doc.ref.update({ used: true }).then(function() {
+          document.getElementById('passcode-modal').style.display = 'none';
+          window._termsUnlocked = true;
+          go('/terms');
+        });
+      }
     })
     .catch(function(e) {
       err.textContent = 'Connection error. Try again.';
