@@ -1031,45 +1031,190 @@ function route(path){
 
 // ── SECRET TERMS PAGE ──
 function renderTerms(app){
-  const footer = document.getElementById('footer-tpl').content.cloneNode(true);
-  const footerEl = document.createElement('div');
-  footerEl.appendChild(footer);
   app.innerHTML = `
-  <div style="min-height:100vh;background:var(--black);padding-top:0">
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px 48px 80px;text-align:center;border-bottom:1px solid var(--border)">
-      <div style="font-weight:700;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--lime);margin-bottom:28px;display:flex;align-items:center;gap:16px">
-        <span style="display:block;width:40px;height:2px;background:var(--lime)"></span>
-        You Found It
-        <span style="display:block;width:40px;height:2px;background:var(--lime)"></span>
-      </div>
-      <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,14vw,180px);line-height:.85;letter-spacing:4px;color:var(--white);margin-bottom:0">WELCOME</h1>
+  <style>
+    .secret-section{padding:80px 80px 0;border-bottom:1px solid var(--border);margin-bottom:0}
+    .secret-section:last-of-type{border-bottom:none}
+    .secret-sec-title{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:3px;color:var(--lime);margin-bottom:8px}
+    .secret-sec-sub{font-size:14px;color:var(--muted);font-weight:300;margin-bottom:40px;letter-spacing:.5px}
+    .games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:80px}
+    .game-card{background:var(--gray);aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s}
+    .game-card:hover{transform:translateY(-3px)}
+    .game-card:hover .game-overlay{opacity:1}
+    .game-icon{font-size:40px;margin-bottom:10px}
+    .game-name{font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase}
+    .game-overlay{position:absolute;inset:0;background:rgba(212,245,60,.12);border:2px solid var(--lime);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--lime)}
+    .tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;margin-bottom:80px}
+    .tool-card{background:var(--gray);padding:36px 32px;cursor:pointer;transition:background .2s;border:1px solid transparent}
+    .tool-card:hover{background:var(--mid);border-color:rgba(212,245,60,.2)}
+    .tool-icon{font-size:28px;margin-bottom:14px}
+    .tool-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--white);margin-bottom:6px}
+    .tool-desc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6}
+    .game-frame-wrap{position:fixed;inset:0;z-index:500;background:var(--black);display:none;flex-direction:column}
+    .game-frame-bar{height:44px;background:#111;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+    .game-frame-title{font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--lime)}
+    .game-frame-close{background:transparent;border:none;color:var(--muted);font-size:22px;cursor:pointer;transition:color .2s}
+    .game-frame-close:hover{color:var(--white)}
+    .game-frame-bar input{flex:1;margin:0 16px;background:rgba(255,255,255,.06);border:none;border-bottom:1px solid rgba(255,255,255,.15);color:var(--white);padding:6px 10px;font-size:13px;font-family:'Barlow',sans-serif;outline:none}
+    @media(max-width:1100px){.games-grid{grid-template-columns:repeat(2,1fr)}.tools-grid{grid-template-columns:1fr}.secret-section{padding:48px 24px 0}}
+  </style>
+
+  <!-- Game launcher overlay -->
+  <div class="game-frame-wrap" id="game-frame-wrap">
+    <div class="game-frame-bar">
+      <span class="game-frame-title" id="game-frame-title">Game</span>
+      <input id="game-url-bar" type="text" placeholder="Enter any URL..." onkeydown="if(event.key==='Enter'){document.getElementById('game-iframe').src=this.value}">
+      <button class="game-frame-close" onclick="closeGame()">✕</button>
     </div>
+    <iframe id="game-iframe" style="flex:1;border:none;width:100%;background:#000" allow="fullscreen"></iframe>
+  </div>
 
-    <div style="max-width:780px;margin:0 auto;padding:96px 48px 120px">
-      <p style="font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,3vw,44px);letter-spacing:2px;color:var(--lime);margin-bottom:40px;line-height:1">The internet has rules. It also has gaps.</p>
+  <!-- HERO -->
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px 48px 80px;text-align:center;border-bottom:1px solid var(--border)">
+    <div style="font-weight:700;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--lime);margin-bottom:28px;display:flex;align-items:center;gap:16px">
+      <span style="display:block;width:40px;height:2px;background:var(--lime)"></span>
+      Members Only
+      <span style="display:block;width:40px;height:2px;background:var(--lime)"></span>
+    </div>
+    <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,14vw,180px);line-height:.85;letter-spacing:4px;color:var(--white);margin-bottom:0">WELCOME</h1>
+    <p style="font-size:16px;font-weight:300;color:rgba(245,245,240,.45);margin-top:28px;max-width:480px;line-height:1.7">You made it in. Everything below is yours. Don't share the door.</p>
+  </div>
 
-      <p style="font-size:17px;font-weight:300;line-height:1.85;color:rgba(245,245,240,.75);margin-bottom:36px">
-        Welcome to the most complete online bypassing resource on the internet. We've spent years cataloguing every loophole, workaround, and shortcut worth knowing — the kind of knowledge that turns locked doors into open ones and "you can't do that" into already done.
-      </p>
+  <!-- TOOLS -->
+  <div class="secret-section">
+    <div class="secret-sec-title">Tools</div>
+    <div class="secret-sec-sub">Quick access to the essentials</div>
+    <div class="tools-grid">
 
-      <p style="font-size:17px;font-weight:300;line-height:1.85;color:rgba(245,245,240,.75);margin-bottom:36px">
-        Whether you're navigating paywalls, restrictions, rate limits, geo-blocks, or any of the other invisible walls the web likes to put up — this is your starting point. Every tool, every method, every technique is here because it works.
-      </p>
-
-      <div style="background:var(--gray);border-left:3px solid var(--lime);padding:28px 32px;margin:48px 0">
-        <p style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--lime);margin-bottom:10px">THE ONLY RULE</p>
-        <p style="font-size:15px;font-weight:300;line-height:1.75;color:rgba(245,245,240,.7)">Don't be loud about it. The best methods stay useful because they stay quiet. You found this page — you already know how this works.</p>
+      <div class="tool-card" onclick="openBlankTab()">
+        <div class="tool-icon">🔲</div>
+        <div class="tool-name">About:Blank Tab</div>
+        <div class="tool-desc">Opens a new tab with a blank URL bar. Load any site inside — the address bar stays clean. Great for getting past blocked sites without raising flags.</div>
       </div>
 
-      <p style="font-size:17px;font-weight:300;line-height:1.85;color:rgba(245,245,240,.75);margin-bottom:48px">
-        More coming soon. Check back. Tell nobody.
-      </p>
+      <div class="tool-card" onclick="cloakTab()">
+        <div class="tool-icon">🎭</div>
+        <div class="tool-name">Tab Cloaker</div>
+        <div class="tool-desc">Instantly changes this tab's title and icon to look like Google Classroom. One click disguise — click again to toggle back.</div>
+      </div>
 
-      <button onclick="go('/')" style="background:transparent;border:1.5px solid rgba(255,255,255,.2);color:var(--white);padding:14px 36px;font-family:'Barlow',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--lime)';this.style.color='var(--lime)'" onmouseout="this.style.borderColor='rgba(255,255,255,.2)';this.style.color='var(--white)'">← Back</button>
+      <div class="tool-card" onclick="openProxy()">
+        <div class="tool-icon">🌐</div>
+        <div class="tool-name">Web Proxy</div>
+        <div class="tool-desc">Browse the web through a proxy — routes your traffic through an external server so the site you're visiting doesn't show up in network logs directly.</div>
+      </div>
+
+      <div class="tool-card" onclick="setPanicKey()">
+        <div class="tool-icon">🚨</div>
+        <div class="tool-name">Panic Button</div>
+        <div class="tool-desc">Press <strong style="color:var(--lime)">Shift + ~</strong> at any time to instantly redirect this tab to Google. Useful when someone walks by. Always active while you're on this page.</div>
+      </div>
+
     </div>
   </div>
+
+  <!-- GAMES -->
+  <div class="secret-section">
+    <div class="secret-sec-title">Games</div>
+    <div class="secret-sec-sub">Click any game to launch fullscreen</div>
+    <div class="games-grid">
+      <div class="game-card" onclick="launchGame('Slope','https://slope-game.github.io/')">
+        <div class="game-icon">🎿</div>
+        <div class="game-name">Slope</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('Run 3','https://run3game.github.io/')">
+        <div class="game-icon">🏃</div>
+        <div class="game-name">Run 3</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('Snake','https://playsnake.org/')">
+        <div class="game-icon">🐍</div>
+        <div class="game-name">Snake</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('2048','https://2048.io/')">
+        <div class="game-icon">🔢</div>
+        <div class="game-name">2048</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('Tetris','https://tetris.com/play-tetris')">
+        <div class="game-icon">🧩</div>
+        <div class="game-name">Tetris</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('Cookie Clicker','https://orteil.dashnet.org/cookieclicker/')">
+        <div class="game-icon">🍪</div>
+        <div class="game-name">Cookie Clicker</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:48px 80px;text-align:center;border-top:1px solid var(--border)">
+    <button onclick="go('/')" style="background:transparent;border:1.5px solid rgba(255,255,255,.15);color:var(--muted);padding:12px 32px;font-family:'Barlow',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--lime)';this.style.color='var(--lime)'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='var(--muted)'">← Back to store</button>
+  </div>
   `;
-  app.appendChild(footerEl.firstElementChild);
+
+  // ── GAMES ──
+  window.launchGame = function(name, url) {
+    document.getElementById('game-frame-wrap').style.display = 'flex';
+    document.getElementById('game-frame-title').textContent = name;
+    document.getElementById('game-iframe').src = url;
+    document.getElementById('game-url-bar').value = url;
+  };
+  window.closeGame = function() {
+    document.getElementById('game-frame-wrap').style.display = 'none';
+    document.getElementById('game-iframe').src = '';
+  };
+
+  // ── ABOUT:BLANK ──
+  window.openBlankTab = function() {
+    var w = window.open('about:blank','_blank');
+    if(!w){ alert('Allow popups for this site to use this feature.'); return; }
+    w.document.write('<html><head><title></title></head><body style="margin:0;padding:0;background:#000"><iframe src="https://google.com" style="width:100%;height:100vh;border:none"></iframe></body></html>');
+    w.document.close();
+  };
+
+  // ── TAB CLOAKER ──
+  var _cloaked = false;
+  var _origTitle = document.title;
+  var _origIcon = '';
+  window.cloakTab = function() {
+    if(!_cloaked) {
+      _origTitle = document.title;
+      document.title = 'Google Classroom';
+      var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      _origIcon = link.href;
+      link.href = 'https://ssl.gstatic.com/classroom/favicon.png';
+      document.getElementsByTagName('head')[0].appendChild(link);
+      _cloaked = true;
+      showToast('Tab cloaked as Google Classroom');
+    } else {
+      document.title = _origTitle;
+      var link = document.querySelector("link[rel*='icon']");
+      if(link) link.href = _origIcon;
+      _cloaked = false;
+      showToast('Tab restored');
+    }
+  };
+
+  // ── PROXY ──
+  window.openProxy = function() {
+    window.launchGame('Web Proxy', 'https://www.croxyproxy.com/');
+  };
+
+  // ── PANIC BUTTON ──
+  window.setPanicKey = function() {
+    showToast('Panic key active: Shift + ~');
+  };
+  document.onkeydown = function(e) {
+    if(e.shiftKey && e.key === '~') {
+      window.location.replace('https://classroom.google.com');
+    }
+  };
 }
 
 window.addEventListener('popstate',()=>{
