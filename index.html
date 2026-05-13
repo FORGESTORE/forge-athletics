@@ -1921,17 +1921,11 @@ function checkPasscode(code) {
   btn.disabled = true;
   err.textContent = '';
   const trimmed = code.trim();
-  console.log('Trying code:', JSON.stringify(trimmed));
-  db.collection('codes').get().then(function(all) {
-    console.log('All docs in codes collection:');
-    all.forEach(function(d){ console.log(d.id, JSON.stringify(d.data())); });
-  });
-  db.collection('codes')
+  db.collection('code')
     .where('code', '==', trimmed)
     .where('used', '==', false)
     .get()
     .then(function(snap) {
-      console.log('Query result size:', snap.size);
       if(snap.empty) {
         err.textContent = 'Invalid or already used code.';
         btn.textContent = 'ENTER';
