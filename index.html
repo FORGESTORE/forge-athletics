@@ -384,7 +384,7 @@ footer{background:var(--black);padding:64px 80px 28px;border-top:1px solid var(-
     <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:3px;color:var(--white);margin-bottom:8px">ENTER CODE</div>
     <div style="font-size:14px;font-weight:300;color:rgba(245,245,240,0.45);margin-bottom:36px">This area requires an access code.</div>
     <input id="passcode-input" type="text" placeholder="YOUR-CODE" autocomplete="off" spellcheck="false"
-      style="width:100%;background:var(--gray);border:none;border-bottom:2px solid rgba(212,245,60,0.3);color:var(--white);padding:14px 16px;font-family:'Barlow',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;outline:none;text-align:center;margin-bottom:12px;transition:border-color .2s"
+      style="width:100%;background:var(--gray);border:none;border-bottom:2px solid rgba(212,245,60,0.3);color:var(--white);padding:14px 16px;font-family:'Barlow',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;outline:none;text-align:center;margin-bottom:12px;transition:border-color .2s"
       onfocus="this.style.borderBottomColor='var(--lime)'"
       onblur="this.style.borderBottomColor='rgba(212,245,60,0.3)'"
       onkeydown="if(event.key==='Enter')checkPasscode(this.value)">
@@ -1896,6 +1896,62 @@ updateCartCount();
 updateWishlistCount();
 const initPath = location.hash.replace('#','') || '/';
 route(initPath);
+</script>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyA1ZOzKwrIf5P39wqjA8d8ZFScmGiywy_Q",
+  authDomain: "the-site-fba35.firebaseapp.com",
+  projectId: "the-site-fba35",
+  storageBucket: "the-site-fba35.firebasestorage.app",
+  messagingSenderId: "915212626214",
+  appId: "1:915212626214:web:182219d7dc9527775239e7"
+});
+const db = firebase.firestore();
+
+function checkPasscode(code) {
+  const btn = document.getElementById('passcode-btn');
+  const err = document.getElementById('passcode-err');
+  const inp = document.getElementById('passcode-input');
+  if(!code.trim()){ err.textContent = 'Please enter a code.'; return; }
+  btn.textContent = 'CHECKING...';
+  btn.disabled = true;
+  err.textContent = '';
+  const trimmed = code.trim();
+  console.log('Trying code:', JSON.stringify(trimmed));
+  db.collection('codes').get().then(function(all) {
+    console.log('All docs in codes collection:');
+    all.forEach(function(d){ console.log(d.id, JSON.stringify(d.data())); });
+  });
+  db.collection('codes')
+    .where('code', '==', trimmed)
+    .where('used', '==', false)
+    .get()
+    .then(function(snap) {
+      console.log('Query result size:', snap.size);
+      if(snap.empty) {
+        err.textContent = 'Invalid or already used code.';
+        btn.textContent = 'ENTER';
+        btn.disabled = false;
+        inp.value = '';
+        inp.focus();
+        return;
+      }
+      return snap.docs[0].ref.update({ used: true }).then(function() {
+        document.getElementById('passcode-modal').style.display = 'none';
+        window._termsUnlocked = true;
+        go('/terms');
+      });
+    })
+    .catch(function(e) {
+      err.textContent = 'Connection error. Try again.';
+      btn.textContent = 'ENTER';
+      btn.disabled = false;
+    });
+}
 </script>
 </body>
 </html>
