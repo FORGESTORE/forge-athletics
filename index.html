@@ -1037,7 +1037,7 @@ function renderTerms(app){
     .secret-section:last-of-type{border-bottom:none}
     .secret-sec-title{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:3px;color:var(--lime);margin-bottom:8px}
     .secret-sec-sub{font-size:14px;color:var(--muted);font-weight:300;margin-bottom:40px;letter-spacing:.5px}
-    .games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:80px}
+    .games-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:80px}
     .game-card{background:var(--gray);aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s}
     .game-card:hover{transform:translateY(-3px)}
     .game-card:hover .game-overlay{opacity:1}
@@ -1116,36 +1116,56 @@ function renderTerms(app){
   <!-- GAMES -->
   <div class="secret-section">
     <div class="secret-sec-title">Games</div>
-    <div class="secret-sec-sub">Click any game to launch fullscreen</div>
+    <div class="secret-sec-sub">Click any game to launch in new tab</div>
     <div class="games-grid">
-      <div class="game-card" onclick="launchGame('Slope','https://slope-game.github.io/')">
-        <div class="game-icon">🎿</div>
-        <div class="game-name">Slope</div>
+      <div class="game-card" onclick="launchGame('Shell Shockers','https://shellshock.io/','popup')">
+        <div class="game-icon">🥚</div>
+        <div class="game-name">Shell Shockers</div>
         <div class="game-overlay">▶ Play</div>
       </div>
-      <div class="game-card" onclick="launchGame('Run 3','https://run3game.github.io/')">
-        <div class="game-icon">🏃</div>
-        <div class="game-name">Run 3</div>
+      <div class="game-card" onclick="launchGame('Smash Karts','https://smashkarts.io/','popup')">
+        <div class="game-icon">🏎️</div>
+        <div class="game-name">Smash Karts</div>
         <div class="game-overlay">▶ Play</div>
       </div>
-      <div class="game-card" onclick="launchGame('Snake','https://playsnake.org/')">
-        <div class="game-icon">🐍</div>
-        <div class="game-name">Snake</div>
+      <div class="game-card" onclick="launchGame('LOL Beans','https://lolbeans.io/','popup')">
+        <div class="game-icon">🫘</div>
+        <div class="game-name">LOL Beans</div>
         <div class="game-overlay">▶ Play</div>
       </div>
-      <div class="game-card" onclick="launchGame('2048','https://2048.io/')">
+      <div class="game-card" onclick="launchGame('Poly Track','https://polytrack.kodub.com/','iframe')">
+        <div class="game-icon">🏁</div>
+        <div class="game-name">Poly Track</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('GeoGuessr','https://www.geoguessr.com/','popup')">
+        <div class="game-icon">🌍</div>
+        <div class="game-name">GeoGuessr</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('Kour.io','https://kour.io/','popup')">
+        <div class="game-icon">🔫</div>
+        <div class="game-name">Kour.io</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('Diep.io','https://diep.io/','iframe')">
+        <div class="game-icon">🔵</div>
+        <div class="game-name">Diep.io</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('Gulper.io','https://gulper.io/','iframe')">
+        <div class="game-icon">🐟</div>
+        <div class="game-name">Gulper.io</div>
+        <div class="game-overlay">▶ Play</div>
+      </div>
+      <div class="game-card" onclick="launchGame('2048','https://2048.io/','iframe')">
         <div class="game-icon">🔢</div>
         <div class="game-name">2048</div>
         <div class="game-overlay">▶ Play</div>
       </div>
-      <div class="game-card" onclick="launchGame('Tetris','https://tetris.com/play-tetris')">
+      <div class="game-card" onclick="launchGame('Tetris','https://tetris.com/play-tetris','iframe')">
         <div class="game-icon">🧩</div>
         <div class="game-name">Tetris</div>
-        <div class="game-overlay">▶ Play</div>
-      </div>
-      <div class="game-card" onclick="launchGame('Cookie Clicker','https://orteil.dashnet.org/cookieclicker/')">
-        <div class="game-icon">🍪</div>
-        <div class="game-name">Cookie Clicker</div>
         <div class="game-overlay">▶ Play</div>
       </div>
     </div>
@@ -1157,11 +1177,23 @@ function renderTerms(app){
   `;
 
   // ── GAMES ──
-  window.launchGame = function(name, url) {
-    document.getElementById('game-frame-wrap').style.display = 'flex';
-    document.getElementById('game-frame-title').textContent = name;
-    document.getElementById('game-iframe').src = url;
-    document.getElementById('game-url-bar').value = url;
+  window.launchGame = function(name, url, mode) {
+    if (mode === 'popup') {
+      var w = screen.availWidth;
+      var h = screen.availHeight;
+      var win = window.open(url, 'forge_game',
+        'width=' + w + ',height=' + h +
+        ',left=0,top=0' +
+        ',menubar=no,toolbar=no,location=no,status=no' +
+        ',resizable=yes,scrollbars=yes'
+      );
+      if (!win) { alert('Allow popups for this site to launch games.'); }
+    } else {
+      document.getElementById('game-frame-wrap').style.display = 'flex';
+      document.getElementById('game-frame-title').textContent = name;
+      document.getElementById('game-iframe').src = url;
+      document.getElementById('game-url-bar').value = url;
+    }
   };
   window.closeGame = function() {
     document.getElementById('game-frame-wrap').style.display = 'none';
